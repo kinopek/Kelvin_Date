@@ -3,12 +3,12 @@
 // found in the LICENSE file.
 
 import 'dart:async';
+//import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:english_words/english_words.dart';
-
-
+import 'package:geocoder/geocoder.dart';
 
 void main() => runApp(MyApp());
 
@@ -43,7 +43,9 @@ class MyApp  extends StatelessWidget  {
 class GeolocationExampleState extends State
 {
   Geolocator _geolocator;
-  Position _position;
+  Position _position; //your phone
+  final _coordinates = new Coordinates  (51.0, 17.0);//rynek for now
+  double _distanceInMeters;
 
   void checkPermission() {
     _geolocator.checkGeolocationPermissionStatus().then((status) { print('status: $status'); });
@@ -62,15 +64,24 @@ class GeolocationExampleState extends State
     //    updateLocation();
 
     StreamSubscription positionStream = _geolocator.getPositionStream(locationOptions).listen(
-            (Position position) {
+            (Position position)
+        {
           _position = position;
         });
   }
 
   void updateLocation() async {
     try {
+
+
+      //final coordinates = new Coordinates(1.10, 45.50);
+      //var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+     //_rynek = addresses.first.coordinates;
+
       Position newPosition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
           .timeout(new Duration(seconds: 5));
+
+      _distanceInMeters = await Geolocator().distanceBetween(newPosition.latitude, newPosition.longitude, _coordinates.latitude, _coordinates.longitude);
 
       setState(() {
         _position = newPosition;
@@ -88,8 +99,11 @@ class GeolocationExampleState extends State
       ),
       body: Center(
           child: Text(
-              'Latitude: ${_position != null ? _position.latitude.toString() : '0'},'
-                  ' Longitude: ${_position != null ? _position.longitude.toString() : '0'}'
+              'Your Latitude: ${_position != null ? _position.latitude.toString() : '0'},'
+                  ' Your Longitude: ${_position != null ? _position.longitude.toString() : '0'}'
+                  ' Rynek Latitude: ${_coordinates != null ? _coordinates.latitude.toString() : '0'},'
+                  ' Rynek Longitude: ${_coordinates != null ? _coordinates.longitude.toString() : '0'}'
+                  ' Distance in meters: ${_distanceInMeters != null ? _distanceInMeters.toString() : '0'}'
           )
       ),
     );
