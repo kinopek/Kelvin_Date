@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "317730599296",
+    "firebase_url": "https://hoot-kool.firebaseio.com",
+    "project_id": "hoot-kool",
+    "storage_bucket": "hoot-kool.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317730599296:android:67a4b958036fbdd8db1165",
+        "android_client_info": {
+          "package_name": "com.pwr.kelvindate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "317730599296-43tbjlfraq8pk5u4gt5nj967gc1qe74l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYaf5PMyNsf1ZZClL1cB-KufSZKgS8R1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "317730599296-43tbjlfraq8pk5u4gt5nj967gc1qe74l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
