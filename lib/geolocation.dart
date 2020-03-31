@@ -4,9 +4,10 @@ import 'dart:collection';
 import 'dart:math' show cos, sqrt, asin;
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:english_words/english_words.dart';
+//import 'package:english_words/english_words.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'fire.dart';
 
 class GeolocationExampleState extends State
 {
@@ -16,7 +17,8 @@ class GeolocationExampleState extends State
   final _coordinates = new Coordinates  (51.1098966,17.0326828);//rynek for now, another user later
   double _distance = 100.0;
   Queue<double> _dist_archive= new Queue();
-  final databaseReference = FirebaseDatabase.instance.reference();
+  static Fire f = new Fire();
+  Coordinates c2 = f.getCoordinates( );//to get rynek from database
 
   void checkPermission() {
     _geolocator.checkGeolocationPermissionStatus().then((status) { print('status: $status'); });
@@ -57,7 +59,11 @@ class GeolocationExampleState extends State
 
   double updateDistance()
   {
-    _distance=calculateDistance(_position.latitude, _position.longitude, _coordinates.latitude, _coordinates.longitude);
+    setState(()
+    {
+      _distance=calculateDistance(_position.latitude, _position.longitude, _coordinates.latitude, _coordinates.longitude);
+    });
+
     _dist_archive.add(_distance);
     if(_dist_archive.length>10)
     {
@@ -79,13 +85,7 @@ class GeolocationExampleState extends State
             (1 - c((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
   }
-  void createRecord(){
-    String id = new DateTime.now().millisecondsSinceEpoch.toString();
-    databaseReference.child(id).set({
-      'latitude': _position.latitude,
-      'longitude':  _position.longitude
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +102,7 @@ class GeolocationExampleState extends State
             Text(' Rynek Latitude: ${_coordinates != null ? _coordinates.latitude.toString() : 'processing'},'),
             Text(' Rynek Longitude: ${_coordinates != null ? _coordinates.longitude.toString() : 'processing'}'),
             Text(' Distance in kilometers: ${_position != null ? updateDistance() : 'processing'},' ),
-            RaisedButton(child: Text('Save to Database'), onPressed: () {createRecord();},)
+            RaisedButton(child: Text('Save to Database'), onPressed: () {f.createRecord(_position.latitude, _position.longitude);},)
         ]
             )
       ),
