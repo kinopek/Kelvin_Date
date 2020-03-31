@@ -2,6 +2,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:test/test.dart';
 import 'package:kelvindate/main.dart';
+import 'package:kelvindate/geolocation.dart';
 
 void main() {
   test('Coordinates should be equal', ()

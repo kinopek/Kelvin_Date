@@ -12,7 +12,7 @@ class GeolocationExampleState extends State
   Geolocator _geolocator;
   Position _position; //your phone
   Coordinates c = new Coordinates  (51.0, 17.0);//for testing
-  final _coordinates = new Coordinates  (51.1098966,17.0326828);//rynek for now
+  final _coordinates = new Coordinates  (51.1098966,17.0326828);//rynek for now, another user later
   double _distance = 100.0;
   Queue<double> _dist_archive= new Queue();
 
