@@ -9,6 +9,9 @@ import 'package:geocoder/geocoder.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'fire.dart';
 import 'geolocation.dart';
+import 'register.dart';
+import 'forgot.dart';
+
 
 class LogingState extends State
 {
@@ -26,17 +29,31 @@ class LogingState extends State
               children: <Widget>
               [
                 Text('Welcome to KelvinDate' ),
-
+                Text('Your Login:' ),
+                Text('Your Password:' ),
                 RaisedButton(child: Text('Log In!'), onPressed: ()
                 {
-
                   Navigator.push
                     (
                       context,
                       MaterialPageRoute(builder: (context) => GeolocationExample())
                   );
-
-
+                },),
+                RaisedButton(child: Text('Do not have account?'), onPressed: ()
+                {
+                  Navigator.push
+                    (
+                      context,
+                      MaterialPageRoute(builder: (context) => Register())
+                  );
+                },),
+                RaisedButton(child: Text('Forgot password?'), onPressed: ()
+                {
+                  Navigator.push
+                    (
+                      context,
+                      MaterialPageRoute(builder: (context) => Forgot())
+                  );
                 },)
               ]
           )
