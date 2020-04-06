@@ -92,16 +92,32 @@ class GeolocationExampleState extends State
     return Scaffold(
       appBar: AppBar(
         title: Text('KelvinDate'),
+        backgroundColor: Colors.red,
       ),
       body: Center(
         child: Column(
           children: <Widget>
         [
-            Text('Your Latitude: ${_position != null ? _position.latitude.toString() : 'processing'},' ),
-            Text('Your Longitude: ${_position != null ? _position.longitude.toString() : 'processing'}'),
+            Text('Your Latitude: ${_position != null ? _position.latitude.toString() : 'processing'},',
+          style: TextStyle(
+             // color: Colors.red,
+              fontSize: 20
+          )
+      ),
+            Text('Your Longitude: ${_position != null ? _position.longitude.toString() : 'processing'}',
+                style: TextStyle(
+                  // color: Colors.red,
+                    fontSize: 20
+                )
+            ),
             Text(' Rynek Latitude: ${_coordinates != null ? _coordinates.latitude.toString() : 'processing'},'),
             Text(' Rynek Longitude: ${_coordinates != null ? _coordinates.longitude.toString() : 'processing'}'),
-            Text(' Distance in kilometers: ${_position != null ? updateDistance() : 'processing'},' ),
+            Text(' Distance in kilometers: ${_position != null ? updateDistance() : 'processing'},' ,
+                style: TextStyle(
+                  // color: Colors.red,
+                    fontSize: 20
+                )
+            ),
             RaisedButton(child: Text('Save to Database'), onPressed: () {f.createRecord(_position.latitude, _position.longitude);},)
         ]
             )

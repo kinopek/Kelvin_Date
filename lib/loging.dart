@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 //import 'dart:html';
 import 'dart:math' show cos, sqrt, asin;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 //import 'package:english_words/english_words.dart';
@@ -22,15 +23,54 @@ class LogingState extends State
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('KelvinDate'),
+        backgroundColor: Colors.red,
+        title: Text('Log In'),
+
       ),
       body: Center(
           child: Column(
               children: <Widget>
               [
-                Text('Welcome to KelvinDate' ),
-                Text('Your Login:' ),
-                Text('Your Password:' ),
+
+                Text('Welcome to KelvinDate',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30
+                        )
+                ),
+           TextFormField(
+            decoration: InputDecoration
+              (
+                labelText: 'Your Login:',
+                icon: Icon(Icons.person),
+             hintText: 'What username you registered with?',
+             ),
+
+        onSaved: (String value) {
+          // This optional block of code can be used to run
+          // code when the user saves the form.
+        },
+        validator: (String value) {
+          return value.contains('@') ? 'Do not use the @ char. It is not an email' : null;
+        },
+            ),
+                TextFormField(
+                  decoration: InputDecoration
+                    (
+                    labelText: 'Your Password:',
+                    icon: Icon(Icons.lock),
+                    hintText: 'Please enter your password',
+                  ),
+
+                  onSaved: (String value) {
+                    // This optional block of code can be used to run
+                    // code when the user saves the form.
+                  },
+                  validator: (String value)
+                  {
+                  },
+                ),
                 RaisedButton(child: Text('Log In!'), onPressed: ()
                 {
                   Navigator.push

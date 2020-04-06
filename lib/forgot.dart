@@ -1,6 +1,6 @@
 import 'geolocation.dart';
 import 'package:flutter/material.dart';
-
+import 'package:kelvindate/loging.dart';
 
 
 class ForgotState extends State {
@@ -9,20 +9,46 @@ class ForgotState extends State {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('KelvinDate'),
+        title: Text('Password recovery'),
+        backgroundColor: Colors.red,
       ),
       body: Center(
           child: Column(
               children: <Widget>
               [
-                Text('You should remember your own password'),
+                Text('You do not remember your own password? '),
+                TextFormField(
+                  decoration: InputDecoration
+                    (
+                    labelText: 'Your email:',
+                    icon: Icon(Icons.person),
+                    hintText: 'Please enter your email address',
+                  ),
 
-                RaisedButton(child: Text('I will still let you enter'), onPressed: () {
+                  onSaved: (String value) {
+                    // This optional block of code can be used to run
+                    // code when the user saves the form.
+                  },
+                  validator: (String value) {
+                    return !value.contains('@') ? 'please enter some @ character' : null;
+                  },
+                ),
+                Text('We will send you an email with a new password soon. '),
+                RaisedButton(child: Text('Yes, send a new one'), onPressed: () {
                   Navigator.push
                     (
                       context,
                       MaterialPageRoute(builder: (context) => GeolocationExample())
                   );
+
+                },),
+                RaisedButton(child: Text('I remember!'), onPressed: () {
+                  Navigator.pop
+                    (
+                      context,
+                      MaterialPageRoute(builder: (context) => Loging())
+                  );
+
                 },)
               ]
           )
