@@ -12,12 +12,21 @@ import 'fire.dart';
 import 'geolocation.dart';
 import 'register.dart';
 import 'forgot.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kelvindate/SplashPage.dart';
 
 
 class LogingState extends State
 {
+  TextEditingController emailInputController;
+  TextEditingController pwdInputController;
 
-
+  @override
+  initState() {
+    emailInputController = new TextEditingController();
+    pwdInputController = new TextEditingController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,17 +51,18 @@ class LogingState extends State
            TextFormField(
             decoration: InputDecoration
               (
-                labelText: 'Your Login:',
+                labelText: 'Your email:',
                 icon: Icon(Icons.person),
-             hintText: 'What username you registered with?',
+             hintText: 'What mail you registered with?',
              ),
+             controller: emailInputController,
 
         onSaved: (String value) {
           // This optional block of code can be used to run
           // code when the user saves the form.
         },
         validator: (String value) {
-          return value.contains('@') ? 'Do not use the @ char. It is not an email' : null;
+          return value.contains('@') ? 'Do use the @ char. It is an email' : null;
         },
             ),
                 TextFormField(
@@ -62,6 +72,7 @@ class LogingState extends State
                     icon: Icon(Icons.lock),
                     hintText: 'Please enter your password',
                   ),
+                  controller: pwdInputController,
 
                   onSaved: (String value) {
                     // This optional block of code can be used to run
@@ -72,12 +83,22 @@ class LogingState extends State
                   },
                 ),
                 RaisedButton(child: Text('Log In!'), onPressed: ()
-                {
-                  Navigator.push
-                    (
-                      context,
-                      MaterialPageRoute(builder: (context) => GeolocationExample())
-                  );
+                {                    FirebaseAuth.instance
+                        .signInWithEmailAndPassword(
+                        email: emailInputController.text,
+                        password: pwdInputController.text)
+                       .then((result) => {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SplashPage(
+                              )),
+                              (_) => false),
+                      emailInputController.clear(),
+                      pwdInputController.clear(),
+                    })
+                        .catchError((err) => print(err))
+                        .catchError((err) => print(err));
                 },),
                 RaisedButton(child: Text('Do not have account?'), onPressed: ()
                 {
