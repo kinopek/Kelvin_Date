@@ -12,6 +12,7 @@ import 'fire.dart';
 import 'geolocation.dart';
 import 'register.dart';
 import 'forgot.dart';
+import 'fire.dart';
 
 
 class LogingState extends State

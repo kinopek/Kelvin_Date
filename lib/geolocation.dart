@@ -39,8 +39,9 @@ class GeolocationExampleState extends State
     StreamSubscription positionStream = _geolocator.getPositionStream(locationOptions).listen(
             (Position position)
         {
-          _position = position;
-
+          setState(() {
+            _position = position;
+          });
         });
   }
 
