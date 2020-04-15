@@ -29,5 +29,29 @@
     }
   </script>
   <script src="main.dart.js" type="application/javascript"></script>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+       https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+
+  <script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDL_rFcIUejCWE62sbEkEa4MY8Ft-rC89Y",
+    authDomain: "hoot-kool.firebaseapp.com",
+    databaseURL: "https://hoot-kool.firebaseio.com",
+    projectId: "hoot-kool",
+    storageBucket: "hoot-kool.appspot.com",
+    messagingSenderId: "317730599296",
+    appId: "1:317730599296:web:7ed0658cc169bcabdb1165"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
 </body>
 </html>
