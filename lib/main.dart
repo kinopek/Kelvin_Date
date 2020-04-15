@@ -1,9 +1,6 @@
-// Copyright 2018 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-
 import 'package:flutter/material.dart';
+import 'package:kelvindate/register.dart';
+import 'SplashPage.dart';
 import 'geolocation.dart';
 import 'loging.dart';
 
@@ -17,8 +14,12 @@ class MyApp  extends StatelessWidget
 
     return MaterialApp(
       title: 'KelvinDate',//Nazwa Procesu
-      home: Loging( ),
-    );
+      home: SplashPage(),
+        routes: <String, WidgetBuilder>{
+          '/home': (BuildContext context) => GeolocationExample(),
+          '/login': (BuildContext context) => Loging(),
+          '/register': (BuildContext context) => Register(),
+        });
   }
 
 }

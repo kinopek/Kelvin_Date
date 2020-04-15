@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 //import 'dart:html';
 import 'dart:math' show cos, sqrt, asin;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 //import 'package:english_words/english_words.dart';
@@ -34,7 +35,7 @@ class GeolocationExampleState extends State
     LocationOptions locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
 
     checkPermission();
-    //    updateLocation();
+    updateLocation();
 
     StreamSubscription positionStream = _geolocator.getPositionStream(locationOptions).listen(
             (Position position)
@@ -118,7 +119,11 @@ class GeolocationExampleState extends State
                     fontSize: 20
                 )
             ),
-            RaisedButton(child: Text('Save to Database'), onPressed: () {f.createRecord(_position.latitude, _position.longitude);},)
+            RaisedButton(child: Text('Save to Database'), onPressed: () {f.createRecord(_position.latitude, _position.longitude);},),
+            RaisedButton(child: Text('Logout'), onPressed: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.pushReplacementNamed(context, "/login");
+            },)
         ]
             )
       ),

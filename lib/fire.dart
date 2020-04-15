@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 //import 'package:english_words/english_words.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class Fire extends State
@@ -22,6 +23,15 @@ class Fire extends State
     });
   }
 
+  Future createUserRecord(var login,var email, var uid)
+  {
+    databaseReference.child('users').child(uid).set({
+      'login': login,
+      'email':  email
+    });
+  }
+
+
   Coordinates getCoordinates( )
   {
     Coordinates c;
@@ -33,5 +43,6 @@ class Fire extends State
     // TODO: implement build
     return null;
   }
+
 
 }
