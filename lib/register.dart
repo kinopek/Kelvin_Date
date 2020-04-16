@@ -158,7 +158,7 @@ class RegisterState extends State
                   },
                 ),
                 Text("Already have an account?"),
-                FlatButton(
+                RaisedButton(
                   child: Text("Login here!"),
                   onPressed: () {
                     Navigator.pop(context);

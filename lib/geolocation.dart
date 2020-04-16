@@ -12,8 +12,7 @@ import 'fire.dart';
 import 'package:flutter/widgets.dart';
 
 class GeolocationExampleState extends State {
-  //final double _width, _value, _totalValue;
-
+  Timer timer;
 
   Geolocator _geolocator;
   Position _position; //your phone
@@ -21,7 +20,11 @@ class GeolocationExampleState extends State {
   Coordinates c = new Coordinates(51.0, 17.0); //for testing
   final _coordinates = new Coordinates(
   //    51.1098966, 17.0326828); //rynek for now, another user later
-      51.043, 17.079);//karels house
+      51.043, 17.079);//karels house approximation, for testing.
+
+
+
+
 
   Queue<double> _dist_archive = new Queue();
   static Fire f = new Fire();
@@ -48,6 +51,7 @@ class GeolocationExampleState extends State {
   void initState() {
     super.initState();
 
+
     _geolocator = Geolocator();
     LocationOptions locationOptions =
         LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
@@ -61,6 +65,13 @@ class GeolocationExampleState extends State {
       _position = position;
     });
 
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => updateDistance());
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   void updateLocation() async {
@@ -202,7 +213,7 @@ return Stack(children: <Widget>
           borderRadius: BorderRadius.circular(5),
           child: AnimatedContainer(
             width: 10,
-            height: thermoHeight * (1-ratio) ,
+            height: (thermoHeight * (1-ratio) ).abs(),
             duration: Duration(milliseconds: 500),
             decoration: BoxDecoration(
                 color: (ratio < 0.2) ? Colors.deepOrangeAccent : (ratio < 0.7) ? Colors.redAccent : Colors.red,
