@@ -186,6 +186,7 @@ class GeolocationExample extends StatefulWidget {
 class Thermometer extends StatelessWidget
 {
   final double thermoHeight, value, totalValue;
+  double thermoWidth = 10.0;
 
   Thermometer(this.thermoHeight, this.value, this.totalValue);
 
@@ -194,39 +195,65 @@ class Thermometer extends StatelessWidget
   {
     double ratio= value / totalValue;
 
-return Stack(children: <Widget>
+return Stack(
+    alignment: AlignmentDirectional.bottomCenter,
+    children: <Widget>
 [
-  Container
+      Positioned(
+bottom: thermoHeight*0.15,
+        child:
+    Container
     (
-    width: 10,
+   // alignment: Alignment(3.0, 3.0),//bottomCenter,
+    width: thermoWidth*0.7,
     height: thermoHeight,
     decoration: BoxDecoration
       (
         color: Colors.lightBlueAccent,
-        borderRadius: BorderRadius.circular(5)
+      //  borderRadius: BorderRadius.circular(5)
     ),
     child: Align
       (
-        alignment: Alignment(0.0, 1.0),
+        alignment: Alignment.bottomCenter,
         child: Material
           (
           borderRadius: BorderRadius.circular(5),
           child: AnimatedContainer(
-            width: 10,
+            width: thermoWidth*0.5,
             height: (thermoHeight * (1-ratio) ).abs(),
             duration: Duration(milliseconds: 500),
             decoration: BoxDecoration(
                 color: (ratio < 0.2) ? Colors.deepOrangeAccent : (ratio < 0.7) ? Colors.redAccent : Colors.red,
                 borderRadius: BorderRadius.circular(5)),
+
           ),
         ),
-
+    ),
+  ),
 
     ),
-
+      new Image.asset(
+        'pic/th2.png',
+        //alignment: Alignment(3.0,3.0),//.bottomLeft,
+        height: thermoHeight*0.169,
+        // width: thermoWidth*70,
+      ),
+  new Image.asset(
+    'pic/th.png',
+    //alignment: Alignment(3.0,3.0),//.bottomLeft,
+    height: thermoHeight*1.25,
+   // width: thermoWidth*70,
   ),
+
+
+
+
+
+
+
 ]
 );
 
   }
 }
+
