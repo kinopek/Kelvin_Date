@@ -45,6 +45,17 @@ class RegisterState extends State
                   ),
                   controller: loginInputController,
 
+                  onChanged: (val) {
+                    final trimVal = val.trim();
+                    if (val != trimVal)
+                      setState(() {
+                        val=val.trim();
+                        loginInputController.text = trimVal;
+                        loginInputController.selection = TextSelection.fromPosition(TextPosition(offset: trimVal.length));
+                      });
+                  },
+
+
                   onSaved: (String value) {
                     // This optional block of code can be used to run
                     // code when the user saves the form.
@@ -62,6 +73,16 @@ class RegisterState extends State
                     hintText: 'Please enter your email address',
                   ),
                   controller: emailInputController,
+
+                  onChanged: (val) {
+                    final trimVal = val.trim();
+                    if (val != trimVal)
+                      setState(() {
+                        val=val.trim();
+                        emailInputController.text = trimVal;
+                        emailInputController.selection = TextSelection.fromPosition(TextPosition(offset: trimVal.length));
+                      });
+                  },
 
                   onSaved: (String value) {
                     // This optional block of code can be used to run
@@ -81,6 +102,15 @@ class RegisterState extends State
                   ),
                   controller: pwdInputController,
 
+                  onChanged: (val) {
+                    final trimVal = val.trim();
+                    if (val != trimVal)
+                      setState(() {
+                        val=val.trim();
+                        pwdInputController.text = trimVal;
+                        pwdInputController.selection = TextSelection.fromPosition(TextPosition(offset: trimVal.length));
+                      });
+                  },
                   onSaved: (String value) {
                     // This optional block of code can be used to run
                     // code when the user saves the form.
@@ -99,6 +129,16 @@ class RegisterState extends State
                     hintText: 'We just want to be sure',
                   ),
                   controller: confirmPwdInputController,
+
+                  onChanged: (val) {
+                    final trimVal = val.trim();
+                    if (val != trimVal)
+                      setState(() {
+                        val=val.trim();
+                        confirmPwdInputController.text = trimVal;
+                        confirmPwdInputController.selection = TextSelection.fromPosition(TextPosition(offset: trimVal.length));
+                      });
+                  },
 
                   onSaved: (String value) {
                     // This optional block of code can be used to run
