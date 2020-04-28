@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kelvindate/register.dart';
 import 'SplashPage.dart';
+import 'Users.dart';
 import 'geolocation.dart';
 import 'loging.dart';
 
@@ -19,6 +20,8 @@ class MyApp  extends StatelessWidget
           '/home': (BuildContext context) => GeolocationExample(),
           '/login': (BuildContext context) => Loging(),
           '/register': (BuildContext context) => Register(),
+          '/users': (BuildContext context) => Users(),
+
         });
   }
 

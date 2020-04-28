@@ -171,6 +171,13 @@ class GeolocationExampleState extends State {
                 Navigator.pushReplacementNamed(context, "/login");
               },
             ),
+            RaisedButton(
+              child: Text('Users'),
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.pushNamed(context, "/users");
+              },
+            ),
           ]),
         ]),
       ),
