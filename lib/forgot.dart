@@ -24,7 +24,15 @@ class ForgotState extends State {
                     icon: Icon(Icons.person),
                     hintText: 'Please enter your email address',
                   ),
-
+                  onChanged: (val) {
+                    final trimVal = val.trim();
+                    if (val != trimVal)
+                      setState(() {
+                        val=val.trim();
+                       // pwdInputController.text = trimVal;
+                       // pwdInputController.selection = TextSelection.fromPosition(TextPosition(offset: trimVal.length));
+                      });
+                  },
                   onSaved: (String value) {
                     // This optional block of code can be used to run
                     // code when the user saves the form.
@@ -33,6 +41,8 @@ class ForgotState extends State {
                     return !value.contains('@') ? 'please enter some @ character' : null;
                   },
                 ),
+
+
                 Text('We will send you an email with a new password soon. '),
                 RaisedButton(child: Text('Yes, send a new one'), onPressed: () {
                   Navigator.push
