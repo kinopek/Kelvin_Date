@@ -149,6 +149,15 @@ class LogingState extends State
              hintText: 'What mail you registered with?',
              ),
              controller: emailInputController,
+             onChanged: (val) {
+               final trimVal = val.trim();
+               if (val != trimVal)
+                 setState(() {
+                   val=val.trim();
+                   emailInputController.text = trimVal;
+                   emailInputController.selection = TextSelection.fromPosition(TextPosition(offset: trimVal.length));
+                 });
+             },
 
              onChanged: (val) {
                final trimVal = val.trim();
@@ -176,6 +185,15 @@ class LogingState extends State
                     hintText: 'Please enter your password',
                   ),
                   controller: pwdInputController,
+                  onChanged: (val) {
+                    final trimVal = val.trim();
+                    if (val != trimVal)
+                      setState(() {
+                        val=val.trim();
+                        pwdInputController.text = trimVal;
+                        pwdInputController.selection = TextSelection.fromPosition(TextPosition(offset: trimVal.length));
+                      });
+                  },
 
                   onChanged: (val) {
                     final trimVal = val.trim();

@@ -55,7 +55,6 @@ class RegisterState extends State
                       });
                   },
 
-
                   onSaved: (String value) {
                     // This optional block of code can be used to run
                     // code when the user saves the form.
@@ -73,6 +72,15 @@ class RegisterState extends State
                     hintText: 'Please enter your email address',
                   ),
                   controller: emailInputController,
+                  onChanged: (val) {
+                    final trimVal = val.trim();
+                    if (val != trimVal)
+                      setState(() {
+                        val=val.trim();
+                        emailInputController.text = trimVal;
+                        emailInputController.selection = TextSelection.fromPosition(TextPosition(offset: trimVal.length));
+                      });
+                  },
 
                   onChanged: (val) {
                     final trimVal = val.trim();

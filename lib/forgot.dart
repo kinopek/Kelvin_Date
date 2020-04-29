@@ -31,6 +31,7 @@ class ForgotState extends State {
                         val=val.trim();
                        // pwdInputController.text = trimVal;
                        // pwdInputController.selection = TextSelection.fromPosition(TextPosition(offset: trimVal.length));
+
                       });
                   },
                   onSaved: (String value) {
