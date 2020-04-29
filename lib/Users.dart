@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 //import 'dart:html';
-import 'dart:math' show cos, sqrt, asin;
+import 'dart:math' show Random, asin, cos, min, sqrt;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
