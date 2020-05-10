@@ -162,13 +162,6 @@ class GeolocationExampleState extends State {
               },
             ),
             RaisedButton(
-              child: Text('Logout'),
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-                Navigator.pushReplacementNamed(context, "/login");
-              },
-            ),
-            RaisedButton(
               child: Text('Users'),
               onPressed: () {
                 FirebaseAuth.instance.signOut();

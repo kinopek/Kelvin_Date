@@ -93,7 +93,8 @@ class UsersState extends State {
   // Kiknięcie w coś w menu.
   void onItemMenuPress(Choice choice) {
     if (choice.title == 'Log out') {
-      //TODO wylogowywanie - można skopiować z ekranu geolocation.darts
+      FirebaseAuth.instance.signOut();
+      Navigator.pushReplacementNamed(context, "/login");
     } else {
       // Otworzenie edycji użytkownika.
       Navigator.push(
