@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 //import 'package:english_words/english_words.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:kelvindate/const.dart';
 import 'fire.dart';
 import 'package:flutter/widgets.dart';
 
@@ -121,7 +122,7 @@ class GeolocationExampleState extends State {
     return Scaffold(
       appBar: AppBar(
         title: Text('KelvinDate'),
-        backgroundColor: Colors.red,
+        backgroundColor: themeColor,
       ),
       body: Center(
         child: Column(children: <Widget>[
@@ -216,7 +217,7 @@ bottom: thermoHeight*0.15,
     height: thermoHeight,
     decoration: BoxDecoration
       (
-        color: Colors.lightBlueAccent,
+        color: primaryColor,
       //  borderRadius: BorderRadius.circular(5)
     ),
     child: Align

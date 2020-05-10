@@ -27,7 +27,7 @@ class Chat extends StatelessWidget {
       appBar: new AppBar(
         title: new Text(
           'Czat',
-          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+          style: TextStyle(color: themeColor, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),

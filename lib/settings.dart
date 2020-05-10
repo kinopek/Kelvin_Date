@@ -20,7 +20,7 @@ class Settings extends StatelessWidget {
       appBar: new AppBar(
         title: new Text(
           'Ustawienia',
-          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+          style: TextStyle(color: themeColor, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),

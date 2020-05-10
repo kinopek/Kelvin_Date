@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:kelvindate/Users.dart';
+import 'package:kelvindate/const.dart';
 import 'fire.dart';
 import 'geolocation.dart';
 import 'register.dart';
@@ -125,7 +126,7 @@ class LogingState extends State
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: themeColor,
         title: Text('Log In'),
 
       ),
@@ -136,7 +137,7 @@ class LogingState extends State
 
                 Text('Welcome to KelvinDate',
                     style: TextStyle(
-                        color: Colors.red,
+                        color: themeColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 30
                         )

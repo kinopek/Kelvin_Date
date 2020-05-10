@@ -234,7 +234,7 @@ class UsersState extends State {
       appBar: AppBar(
         title: Text(
           'MAIN',
-          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+          style: TextStyle(color: themeColor, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: <Widget>[

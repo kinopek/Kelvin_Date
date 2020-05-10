@@ -1,7 +1,9 @@
+import 'package:kelvindate/const.dart';
+
 import 'geolocation.dart';
 import 'package:flutter/material.dart';
 import 'package:kelvindate/loging.dart';
-
+import 'const.dart';
 
 class ForgotState extends State {
 
@@ -10,7 +12,7 @@ class ForgotState extends State {
     return Scaffold(
       appBar: AppBar(
         title: Text('Password recovery'),
-        backgroundColor: Colors.red,
+        backgroundColor: themeColor,
       ),
       body: Center(
           child: Column(

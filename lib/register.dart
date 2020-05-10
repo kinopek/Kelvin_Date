@@ -4,6 +4,7 @@ import 'package:kelvindate/geolocation.dart';
 import 'loging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'fire.dart';
+import 'const.dart';
 
 
 class RegisterState extends State
@@ -30,7 +31,7 @@ class RegisterState extends State
     return Scaffold(
       appBar: AppBar(
         title: Text('Register'),
-        backgroundColor: Colors.red,
+        backgroundColor: themeColor,
       ),
       body: Center(
           child: Column(
