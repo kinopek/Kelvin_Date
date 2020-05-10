@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:collection';
+
 //import 'dart:html';
 import 'dart:math' show Random, asin, cos, min, sqrt;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+
 //import 'package:english_words/english_words.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -28,12 +30,11 @@ import 'chat.dart';
 
 // Okno z listą użytkowników do czatowania.
 class UsersState extends State {
-
   // zmienne jakieś.
   final String currentUserId = null;
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   bool isLoading = false;
 
@@ -82,7 +83,7 @@ class UsersState extends State {
   // Do sprawdzenia razem z powyższą funkcją.
   void configLocalNotification() {
     var initializationSettingsAndroid =
-    new AndroidInitializationSettings('app_icon');
+        new AndroidInitializationSettings('app_icon');
     var initializationSettingsIOS = new IOSInitializationSettings();
     var initializationSettings = new InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
@@ -143,10 +144,10 @@ class UsersState extends State {
         builder: (BuildContext context) {
           return SimpleDialog(
             contentPadding:
-            EdgeInsets.only(left: 0.0, right: 0.0, top: 0.0, bottom: 0.0),
+                EdgeInsets.only(left: 0.0, right: 0.0, top: 0.0, bottom: 0.0),
             children: <Widget>[
               Container(
-                color: themeColor,
+                color: mainColor,
                 margin: EdgeInsets.all(0.0),
                 padding: EdgeInsets.only(bottom: 10.0, top: 10.0),
                 height: 100.0,
@@ -183,14 +184,14 @@ class UsersState extends State {
                     Container(
                       child: Icon(
                         Icons.cancel,
-                        color: primaryColor,
+                        color: mainColor,
                       ),
                       margin: EdgeInsets.only(right: 10.0),
                     ),
                     Text(
                       'CANCEL',
                       style: TextStyle(
-                          color: primaryColor, fontWeight: FontWeight.bold),
+                          color: mainColor, fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
@@ -204,14 +205,14 @@ class UsersState extends State {
                     Container(
                       child: Icon(
                         Icons.check_circle,
-                        color: primaryColor,
+                        color: mainColor,
                       ),
                       margin: EdgeInsets.only(right: 10.0),
                     ),
                     Text(
                       'YES',
                       style: TextStyle(
-                          color: primaryColor, fontWeight: FontWeight.bold),
+                          color: mainColor, fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
@@ -233,10 +234,11 @@ class UsersState extends State {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'MAIN',
-          style: TextStyle(color: themeColor, fontWeight: FontWeight.bold),
+          'Chat',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        centerTitle: true,
+        backgroundColor: mainColor,
+        centerTitle: false,
         actions: <Widget>[
           PopupMenuButton<Choice>(
             onSelected: onItemMenuPress,
@@ -248,14 +250,13 @@ class UsersState extends State {
                       children: <Widget>[
                         Icon(
                           choice.icon,
-                          color: primaryColor,
+                          color: mainColor,
                         ),
                         Container(
                           width: 10.0,
                         ),
                         Text(
                           choice.title,
-                          style: TextStyle(color: primaryColor),
                         ),
                       ],
                     ));
@@ -275,7 +276,7 @@ class UsersState extends State {
                   if (!snapshot.hasData) {
                     return Center(
                       child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(themeColor),
+                        valueColor: AlwaysStoppedAnimation<Color>(mainColor),
                       ),
                     );
                   } else {
@@ -294,13 +295,13 @@ class UsersState extends State {
             Positioned(
               child: isLoading
                   ? Container(
-                child: Center(
-                  child: CircularProgressIndicator(
-                      valueColor:
-                      AlwaysStoppedAnimation<Color>(themeColor)),
-                ),
-                color: Colors.white.withOpacity(0.8),
-              )
+                      child: Center(
+                        child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(mainColor)),
+                      ),
+                      color: Colors.white.withOpacity(0.8),
+                    )
                   : Container(),
             )
           ],
@@ -321,26 +322,26 @@ class UsersState extends State {
               Material(
                 child: document['photoUrl'] != null
                     ? CachedNetworkImage(
-                  placeholder: (context, url) => Container(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1.0,
-                      valueColor:
-                      AlwaysStoppedAnimation<Color>(themeColor),
-                    ),
-                    width: 50.0,
-                    height: 50.0,
-                    padding: EdgeInsets.all(15.0),
-                  ),
-                  imageUrl: document['photoUrl'],
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                )
+                        placeholder: (context, url) => Container(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 10.0,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(secondaryColor),
+                          ),
+                          width: 50.0,
+                          height: 50.0,
+                          padding: EdgeInsets.all(1.0),
+                        ),
+                        imageUrl: document['photoUrl'],
+                        width: 50.0,
+                        height: 50.0,
+                        fit: BoxFit.cover,
+                      )
                     : Icon(
-                  Icons.account_circle,
-                  size: 50.0,
-                  color: greyColor,
-                ),
+                        Icons.account_circle,
+                        size: 50.0,
+                        color: secondaryColor,
+                      ),
                 borderRadius: BorderRadius.all(Radius.circular(25.0)),
                 clipBehavior: Clip.hardEdge,
               ),
@@ -351,7 +352,7 @@ class UsersState extends State {
                       Container(
                         child: Text(
                           'Nickname: ${document['nickname']}',
-                          style: TextStyle(color: primaryColor),
+                          style: TextStyle(color: Colors.white),
                         ),
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
@@ -359,7 +360,7 @@ class UsersState extends State {
                       Container(
                         child: Text(
                           'About me: ${document['aboutMe'] ?? 'Not available'}',
-                          style: TextStyle(color: primaryColor),
+                          style: TextStyle(color: Colors.white),
                         ),
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
@@ -376,14 +377,14 @@ class UsersState extends State {
                 context,
                 MaterialPageRoute(
                     builder: (context) => Chat(
-                      peerId: document.documentID,
-                      peerAvatar: document['photoUrl'],
-                    )));
+                          peerId: document.documentID,
+                          peerAvatar: document['photoUrl'],
+                        )));
           },
-          color: greyColor2,
+          color: mainColor,
           padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         ),
         margin: EdgeInsets.only(bottom: 10.0, left: 5.0, right: 5.0),
       );
@@ -391,9 +392,9 @@ class UsersState extends State {
   }
 }
 
-class  Users extends StatefulWidget
-{
+class Users extends StatefulWidget {
   final String currentUserId;
+
   Users({Key key, @required this.currentUserId}) : super(key: key);
 
   @override

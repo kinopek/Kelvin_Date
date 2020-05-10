@@ -126,26 +126,29 @@ class LogingState extends State
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: themeColor,
-        title: Text('Log In'),
-
+        backgroundColor: mainColor,
+        title: Text('KelvinDate'),
       ),
       body: Center(
           child: Column(
               children: <Widget>
               [
-
-                Text('Welcome to KelvinDate',
-                    style: TextStyle(
-                        color: themeColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30
-                        )
+                Container(
+                  padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 10.0),
+                  child: Text('Login with email and password:',
+                      style: TextStyle(
+                          color: mainColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20
+                      )
+                  ),
                 ),
-           TextFormField(
+            Container(
+              padding: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
+              child: TextFormField(
             decoration: InputDecoration
               (
-                labelText: 'Your email:',
+                labelText: 'Your e-mail:',
                 icon: Icon(Icons.person),
              hintText: 'What mail you registered with?',
              ),
@@ -168,7 +171,10 @@ class LogingState extends State
           return value.contains('@') ? 'Do use the @ char. It is an email' : null;
         },
             ),
-                TextFormField(
+            ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
+                  child: TextFormField(
                   decoration: InputDecoration
                     (
                     labelText: 'Your Password:',
@@ -194,26 +200,51 @@ class LogingState extends State
                   {
                   },
                 ),
-                RaisedButton(child: Text('Log In!'), onPressed: ()
-                {
-                  handleSignIn();
-                },),
-                RaisedButton(child: Text('Do not have account?'), onPressed: ()
+                ),
+                FlatButton(
+                  onPressed: handleSignIn,
+                  child: Text(
+                    'Log In!',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  color: mainColor,
+                  highlightColor: secondaryColor,
+                  splashColor: Colors.transparent,
+                  textColor: Colors.white,
+                  padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+                ),
+                FlatButton(
+                  child: Text(
+                      'Create new account',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color:secondaryColor,
+                    )
+                  ),
+                  onPressed: ()
                 {
                   Navigator.push
                     (
                       context,
                       MaterialPageRoute(builder: (context) => Register())
                   );
-                },),
-                RaisedButton(child: Text('Forgot password?'), onPressed: ()
+                },
+                  highlightColor: Colors.white,
+                ),
+                FlatButton(child: Text('Recover password',
+                    style: TextStyle(
+                  decoration: TextDecoration.underline,
+                      color:secondaryColor,
+                )), onPressed: ()
                 {
                   Navigator.push
                     (
                       context,
                       MaterialPageRoute(builder: (context) => Forgot())
                   );
-                },)
+                },
+                highlightColor: Colors.white,
+                )
               ]
           )
       ),
