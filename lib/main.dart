@@ -17,10 +17,11 @@ class MyApp  extends StatelessWidget
       title: 'KelvinDate',//Nazwa Procesu
       home: SplashPage(),
         routes: <String, WidgetBuilder>{
-          '/home': (BuildContext context) => GeolocationExample(),
+          '/home': (BuildContext context) => Users(),
           '/login': (BuildContext context) => Loging(),
           '/register': (BuildContext context) => Register(),
           '/users': (BuildContext context) => Users(),
+          '/geo': (BuildContext context) => GeolocationExample(),
 
         });
   }

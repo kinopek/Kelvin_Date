@@ -161,13 +161,6 @@ class GeolocationExampleState extends State {
                 f.createRecord(_position.latitude, _position.longitude);
               },
             ),
-            RaisedButton(
-              child: Text('Users'),
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-                Navigator.pushNamed(context, "/users");
-              },
-            ),
           ]),
         ]),
       ),

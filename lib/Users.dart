@@ -30,8 +30,10 @@ import 'chat.dart';
 
 // Okno z listą użytkowników do czatowania.
 class UsersState extends State {
+  UsersState({Key key, @required this.currentUserId});
+
   // zmienne jakieś.
-  final String currentUserId = null;
+  final String currentUserId;
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -235,7 +237,7 @@ class UsersState extends State {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Chat',
+          'Users',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: mainColor,
@@ -399,7 +401,7 @@ class Users extends StatefulWidget {
   Users({Key key, @required this.currentUserId}) : super(key: key);
 
   @override
-  UsersState createState() => new UsersState();
+  UsersState createState() => new UsersState(currentUserId: currentUserId);
 }
 
 class Choice {
