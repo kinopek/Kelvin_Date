@@ -29,6 +29,7 @@ dependencies:
   geocoder:
   english_words:
   fluttertoast: 4.0.1
+  flutter_launcher_icons: 0.7.5
   shared_preferences: 0.5.7
   image_picker: 0.6.5+3
   cached_network_image: 2.1.0+1
@@ -46,6 +47,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+    image_path: "pic/logo.png"
+    android: true
+    ios: false
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
