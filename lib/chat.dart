@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:kelvindate/geolocation.dart';
 import 'const.dart';
 import 'fullPhoto.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -34,7 +35,12 @@ class Chat extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.not_listed_location, color: Colors.white),
             onPressed: () {
-              Navigator.pushNamed(context, "/geo");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => GeolocationExample(
+                        secondUserId: peerId,
+                      )));
             },
           ),
         ],

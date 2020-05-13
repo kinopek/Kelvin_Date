@@ -13,10 +13,14 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:kelvindate/const.dart';
 import 'fire.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GeolocationExampleState extends State {
+  GeolocationExampleState({Key key, @required this.secondUserId});
   Timer timer;
 
+  SharedPreferences prefs; // Przechowuje dane zalogowanego użytkownika
+  final String secondUserId;
   Geolocator _geolocator;
   Position _position; //your phone
   double _startingDistance = 100.0, _distance = 100.0;
@@ -50,6 +54,7 @@ class GeolocationExampleState extends State {
   @override
   void initState() {
     super.initState();
+    getMyId();
 
     _geolocator = Geolocator();
     LocationOptions locationOptions =
@@ -65,6 +70,10 @@ class GeolocationExampleState extends State {
     });
 
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) => updateDistance());
+  }
+
+  void getMyId() async {
+    prefs = await SharedPreferences.getInstance();
   }
 
   @override
@@ -132,6 +141,8 @@ class GeolocationExampleState extends State {
             ),
           ),
           Text(
+              'My id: ${prefs != null ? prefs.getString('id') : 'poczekaj no' } , my date id: $secondUserId'),
+          Text(
               ' Rynek Latitude: ${_coordinates != null ? _coordinates.latitude.toString() : 'processing'},'),
           Text(
               ' Rynek Longitude: ${_coordinates != null ? _coordinates.longitude.toString() : 'processing'}'),
@@ -169,8 +180,12 @@ class GeolocationExampleState extends State {
 }
 
 class GeolocationExample extends StatefulWidget {
+  final String secondUserId;
+
+  GeolocationExample({Key key, @required this.secondUserId}) : super(key: key);
+
   @override
-  GeolocationExampleState createState() => new GeolocationExampleState();
+  GeolocationExampleState createState() => new GeolocationExampleState(secondUserId: secondUserId);
 }
 
 class Thermometer extends StatelessWidget {
