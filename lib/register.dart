@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kelvindate/SplashPage.dart';
 import 'package:kelvindate/geolocation.dart';
 import 'loging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'fire.dart';
 import 'const.dart';
+import 'functions.dart';
 
 class RegisterState extends State {
   // Kontrolery do przechowywanis odniesień do danych formularza.
@@ -15,6 +17,10 @@ class RegisterState extends State {
   final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
   static Fire f = new Fire();
 
+
+
+
+
   @override
   initState() {
     loginInputController = new TextEditingController();
@@ -23,6 +29,7 @@ class RegisterState extends State {
     confirmPwdInputController = new TextEditingController();
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +109,7 @@ class RegisterState extends State {
                   decoration: InputDecoration(
                     labelText: 'Your password',
                     icon: Icon(Icons.lock),
-                    hintText: 'Please enter the passord for your account',
+                    hintText: 'At least 6 characters, please!',
                   ),
                   controller: pwdInputController,
                   onChanged: (val) {
@@ -189,9 +196,11 @@ class RegisterState extends State {
                                   pwdInputController.clear(),
                                   confirmPwdInputController.clear()
                                 })
-                            .catchError((err) => print(err)))
-                        .catchError((err) => print(err));
-                  } else {
+                            .catchError((e) => Functions.toast( e.message)))
+                            .catchError((err) => Functions.toast( err.message));
+                  }
+                  else
+                    {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -216,6 +225,8 @@ class RegisterState extends State {
         ));
   }
 }
+
+
 
 class Register extends StatefulWidget {
   @override

@@ -19,6 +19,7 @@ import 'package:kelvindate/SplashPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'functions.dart';
 
 
 class LogingState extends State
@@ -70,7 +71,9 @@ class LogingState extends State
   }
 
   // Funkcja logowania.
-  Future<Null> handleSignIn() async{
+  Future <Null> handleSignIn() async
+  {
+
     // Pobranie danych zalogowanego użytkownika.
     prefs = await SharedPreferences.getInstance();
 
@@ -79,18 +82,28 @@ class LogingState extends State
     });
 
     // pobranie obiektu użykownika po zalogowaniu go mailem i hasłem.
-    FirebaseUser firebaseUser = (await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailInputController.text,password: pwdInputController.text)).user;
+    FirebaseUser firebaseUser = (await FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+        email: emailInputController.text, password: pwdInputController.text))
+        .user;
     if (firebaseUser != null) {
       // Sprawdzamy czy w cloud firestore są już dane naszego użytkownika.
-      final QuerySnapshot result = await Firestore.instance.collection('users').where('id', isEqualTo: firebaseUser.uid).getDocuments();
+      final QuerySnapshot result = await Firestore.instance.collection('users')
+          .where('id', isEqualTo: firebaseUser.uid)
+          .getDocuments();
       final List<DocumentSnapshot> documents = result.documents;
       if (documents.length == 0) {
         // Wrzucenie na serwer danych, jeżeli ich tam jeszcze nie ma.
-        Firestore.instance.collection('users').document(firebaseUser.uid).setData({
+        Firestore.instance.collection('users')
+            .document(firebaseUser.uid)
+            .setData({
           'nickname': firebaseUser.displayName,
           'photoUrl': firebaseUser.photoUrl,
           'id': firebaseUser.uid,
-          'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
+          'createdAt': DateTime
+              .now()
+              .millisecondsSinceEpoch
+              .toString(),
           'chattingWith': null
         });
 
@@ -112,13 +125,16 @@ class LogingState extends State
       });
 
       // To jest dobry page route do powrotu po zalogowaniu.
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => SplashPage()),(_) => false);
+      Navigator.pushAndRemoveUntil(
+          context, MaterialPageRoute(builder: (context) => SplashPage()), (
+          _) => false);
     } else {
       Fluttertoast.showToast(msg: "Sign in fail");
       this.setState(() {
         isLoading = false;
       });
     }
+
   }
 
   // Budowanie UI
@@ -168,7 +184,7 @@ class LogingState extends State
           // code when the user saves the form.
         },
         validator: (String value) {
-          return value.contains('@') ? 'Do use the @ char. It is an email' : null;
+          return value.contains('@') ? 'Use the @ char. It is an email' : null;
         },
             ),
             ),
@@ -202,7 +218,14 @@ class LogingState extends State
                 ),
                 ),
                 FlatButton(
-                  onPressed: handleSignIn,
+                  onPressed: ()
+                  {
+                    try{handleSignIn;}//.catchError((e) => Functions.toast( e.message));
+                    catch(e)
+                    {
+                      Functions.toast( e.toString());
+                    }
+                  },
                   child: Text(
                     'Log In!',
                     style: TextStyle(fontSize: 16.0),
