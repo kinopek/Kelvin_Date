@@ -26,14 +26,14 @@ class GeolocationExampleState extends State {
   Position _position; //your phone
   double _startingDistance = 100.0, _distance = 100.0;
   //Coordinates c = new Coordinates(51.0, 17.0); //for testing
-   Coordinates _coordinates ; //new Coordinates(
-      //    51.1098966, 17.0326828); //rynek for now, another user later
-    //  51.043,
-    //  17.079); //karels house approximation, for testing.
+  Coordinates _coordinates ; //new Coordinates(
+  //    51.1098966, 17.0326828); //rynek for now, another user later
+  //  51.043,
+  //  17.079); //karels house approximation, for testing.
 
   Queue<double> _dist_archive = new Queue();
   static Fire f = new Fire();
- // Coordinates c2 = f.getCoordinates(secondUserId); //to get rynek from database
+  // Coordinates c2 = f.getCoordinates(secondUserId); //to get rynek from database
 
 
 
@@ -43,7 +43,7 @@ class GeolocationExampleState extends State {
     });
     _geolocator
         .checkGeolocationPermissionStatus(
-            locationPermission: GeolocationPermission.locationAlways)
+        locationPermission: GeolocationPermission.locationAlways)
         .then((status) {
       print('always status: $status');
     });
@@ -57,14 +57,13 @@ class GeolocationExampleState extends State {
   @override
   void initState() {
     super.initState();
-    getMyId();
-
     _coordinates = f.getCoordinates(secondUserId);
 
+    getMyId();
 
     _geolocator = Geolocator();
     LocationOptions locationOptions =
-        LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
+    LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
 
     checkPermission();
     updateLocation();
@@ -102,18 +101,21 @@ class GeolocationExampleState extends State {
   }
 
   double updateDistance() {
-    setState(() {
-      _distance = calculateDistance(_position.latitude, _position.longitude,
-          _coordinates.latitude, _coordinates.longitude);
-    });
+    if ((_coordinates.latitude!=null)&&(_coordinates.longitude!=null)&&(_position.longitude!=null)&&(_position.latitude!=null))
+    {
+      setState(() {
+        _distance = calculateDistance(_position.latitude, _position.longitude,
+            _coordinates.latitude, _coordinates.longitude);
+      }
+      );
 
-    _dist_archive.add(_distance);
-    if (_dist_archive.length > 10) {
-      _dist_archive.removeFirst();
-    } else if (_dist_archive.length == 1) {
-      _startingDistance = _distance;
+      _dist_archive.add(_distance);
+      if (_dist_archive.length > 10) {
+        _dist_archive.removeFirst();
+      } else if (_dist_archive.length == 1) {
+        _startingDistance = _distance;
+      }
     }
-
     return _distance;
   }
 
@@ -146,27 +148,27 @@ class GeolocationExampleState extends State {
                   color: mainColor, fontWeight: FontWeight.bold, fontSize: 20),
             ),
           ),
+         /* Text(
+//              'My id: ${prefs != null ? prefs.getString('id') : 'poczekaj no' } , \n my date id: $secondUserId'),*/
           Text(
-              'My id: ${prefs != null ? prefs.getString('id') : 'poczekaj no' } , /n my date id: $secondUserId'),
+              ' My date Latitude: ${_coordinates.latitude != null ? _coordinates.latitude.toString() : 'processing'},'),
           Text(
-              ' Rynek Latitude: ${_coordinates.latitude != null ? _coordinates.latitude.toString() : 'processing'},'),
-          Text(
-              ' Rynek Longitude: ${_coordinates.longitude != null ? _coordinates.longitude.toString() : 'processing'}'),
+              ' My date Longitude: ${_coordinates.longitude != null ? _coordinates.longitude.toString() : 'processing'}'),
           Container(
             padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 10.0),
             child: Text(
               ' Distance: ${_position != null ? updateDistance().truncate().toString() + ' km ' + ((updateDistance() - updateDistance().truncate()) * 1000).truncate().toString() + ' m' : 'processing'}',
               style: TextStyle(
-                  // color: Colors.red,
+                // color: Colors.red,
                   fontSize: 20),
             ),
           ),
           Row(children: <Widget>[
             Expanded(
                 child: Column(children: <Widget>[
-              Icon(Icons.place),
-              Text('Distance', textAlign: TextAlign.center)
-            ])),
+                  Icon(Icons.place),
+                  Text('Distance', textAlign: TextAlign.center)
+                ])),
             Expanded(
               child: Thermometer(100.0, _distance, _startingDistance),
             ),
