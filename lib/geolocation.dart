@@ -25,11 +25,11 @@ class GeolocationExampleState extends State {
   Geolocator _geolocator;
   Position _position; //your phone
   double _startingDistance = 100.0, _distance = 100.0;
-  Coordinates c = new Coordinates(51.0, 17.0); //for testing
-  final _coordinates = new Coordinates(
+  //Coordinates c = new Coordinates(51.0, 17.0); //for testing
+   Coordinates _coordinates ; //new Coordinates(
       //    51.1098966, 17.0326828); //rynek for now, another user later
-      51.043,
-      17.079); //karels house approximation, for testing.
+    //  51.043,
+    //  17.079); //karels house approximation, for testing.
 
   Queue<double> _dist_archive = new Queue();
   static Fire f = new Fire();
@@ -58,6 +58,9 @@ class GeolocationExampleState extends State {
   void initState() {
     super.initState();
     getMyId();
+
+    _coordinates = f.getCoordinates(secondUserId);
+
 
     _geolocator = Geolocator();
     LocationOptions locationOptions =
@@ -138,7 +141,7 @@ class GeolocationExampleState extends State {
           Container(
             padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 10.0),
             child: Text(
-              'Your location: ${_position != null ? _position.latitude.toStringAsPrecision(4) : 'processing'} x ${_position != null ? _position.longitude.toStringAsPrecision(4) : 'processing'}',
+              'Your location: ${_position.latitude != null ? _position.latitude.toStringAsPrecision(4) : 'processing'} x ${_position.longitude != null ? _position.longitude.toStringAsPrecision(4) : 'processing'}',
               style: TextStyle(
                   color: mainColor, fontWeight: FontWeight.bold, fontSize: 20),
             ),
@@ -146,9 +149,9 @@ class GeolocationExampleState extends State {
           Text(
               'My id: ${prefs != null ? prefs.getString('id') : 'poczekaj no' } , /n my date id: $secondUserId'),
           Text(
-              ' Rynek Latitude: ${_coordinates != null ? _coordinates.latitude.toString() : 'processing'},'),
+              ' Rynek Latitude: ${_coordinates.latitude != null ? _coordinates.latitude.toString() : 'processing'},'),
           Text(
-              ' Rynek Longitude: ${_coordinates != null ? _coordinates.longitude.toString() : 'processing'}'),
+              ' Rynek Longitude: ${_coordinates.longitude != null ? _coordinates.longitude.toString() : 'processing'}'),
           Container(
             padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 10.0),
             child: Text(
@@ -175,7 +178,14 @@ class GeolocationExampleState extends State {
                 f.createRecord(prefs.getString('id') ,_position.latitude, _position.longitude);
               },
             ),
-          ]),
+            RaisedButton(
+              child: Text('get coordinates of a date'),
+              onPressed: (){
+                _coordinates = f.getCoordinates(secondUserId);
+              },
+            )
+          ]
+          ),
         ]),
       ),
     );

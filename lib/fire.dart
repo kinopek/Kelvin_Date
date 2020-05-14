@@ -55,7 +55,7 @@ class Fire extends State
   void createRecord(var uid, var a, var b)
   {
     String id = new DateTime.now().millisecondsSinceEpoch.toString();
-    databaseReference.child('users').child(uid).child(id).set({
+    databaseReference.child('users').child(uid).child('coordinates').child(id).set({
       'latitude': a,
       'longitude':  b
     });
@@ -72,9 +72,10 @@ class Fire extends State
 
   Coordinates getCoordinates(String id )
   {
+    //Coordinates d =
+    databaseReference.child('users').child(id).orderByChild('coordinates').limitToLast (1);// as Coordinates;
 
-
-    Coordinates c;//= databaseReference.child('users').equalTo(id);
+    Coordinates c= new Coordinates(51.0, 17.0);
     return c;
   }
 
