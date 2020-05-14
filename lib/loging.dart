@@ -78,9 +78,13 @@ class LogingState extends State
       isLoading = true;
     });
 
+
+
     // pobranie obiektu użykownika po zalogowaniu go mailem i hasłem.
     FirebaseUser firebaseUser = (await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailInputController.text,password: pwdInputController.text)).user;
     if (firebaseUser != null) {
+
+/*
       // Sprawdzamy czy w cloud firestore są już dane naszego użytkownika.
       final QuerySnapshot result = await Firestore.instance.collection('users').where('id', isEqualTo: firebaseUser.uid).getDocuments();
       final List<DocumentSnapshot> documents = result.documents;
@@ -106,6 +110,10 @@ class LogingState extends State
         await prefs.setString('photoUrl', documents[0]['photoUrl']);
         await prefs.setString('aboutMe', documents[0]['aboutMe']);
       }
+*/
+      currentUser = await Fire.authentic ( prefs,    emailInputController,   pwdInputController );
+
+
       Fluttertoast.showToast(msg: "Sign in success");
       this.setState(() {
         isLoading = false;

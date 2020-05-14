@@ -21,6 +21,7 @@ class GeolocationExampleState extends State {
 
   SharedPreferences prefs; // Przechowuje dane zalogowanego użytkownika
   final String secondUserId;
+  String tempSecondUID;
   Geolocator _geolocator;
   Position _position; //your phone
   double _startingDistance = 100.0, _distance = 100.0;
@@ -32,7 +33,9 @@ class GeolocationExampleState extends State {
 
   Queue<double> _dist_archive = new Queue();
   static Fire f = new Fire();
-  Coordinates c2 = f.getCoordinates(); //to get rynek from database
+ // Coordinates c2 = f.getCoordinates(secondUserId); //to get rynek from database
+
+
 
   void checkPermission() {
     _geolocator.checkGeolocationPermissionStatus().then((status) {
@@ -141,7 +144,7 @@ class GeolocationExampleState extends State {
             ),
           ),
           Text(
-              'My id: ${prefs != null ? prefs.getString('id') : 'poczekaj no' } , my date id: $secondUserId'),
+              'My id: ${prefs != null ? prefs.getString('id') : 'poczekaj no' } , /n my date id: $secondUserId'),
           Text(
               ' Rynek Latitude: ${_coordinates != null ? _coordinates.latitude.toString() : 'processing'},'),
           Text(
@@ -169,7 +172,7 @@ class GeolocationExampleState extends State {
             RaisedButton(
               child: Text('Save to Database'),
               onPressed: () {
-                f.createRecord(_position.latitude, _position.longitude);
+                f.createRecord(prefs.getString('id') ,_position.latitude, _position.longitude);
               },
             ),
           ]),

@@ -249,7 +249,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                       data: Theme.of(context).copyWith(primaryColor: mainColor),
                       child: TextField(
                         decoration: InputDecoration(
-                          hintText: 'Sweetie',
+                          hintText: 'example: Excellence123',
                           contentPadding: new EdgeInsets.all(5.0),
                           hintStyle: TextStyle(color: mainColor),
                         ),
@@ -276,7 +276,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                       data: Theme.of(context).copyWith(primaryColor: mainColor),
                       child: TextField(
                         decoration: InputDecoration(
-                          hintText: 'Fun, like travel and play PES...',
+                          hintText: 'example: experienced extrovert, extremal existentionalist',
                           contentPadding: EdgeInsets.all(5.0),
                           hintStyle: TextStyle(color: secondaryColor),
                         ),
