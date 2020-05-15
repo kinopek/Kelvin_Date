@@ -3,13 +3,13 @@ import 'dart:collection';
 
 //import 'dart:html';
 import 'dart:math' show cos, sqrt, asin;
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 //import 'package:english_words/english_words.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:firebase_database/firebase_database.dart';
+//import 'package:firebase_database/firebase_database.dart';
 import 'package:kelvindate/const.dart';
 import 'fire.dart';
 import 'package:flutter/widgets.dart';

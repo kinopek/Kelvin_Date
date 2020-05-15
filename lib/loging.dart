@@ -1,25 +1,25 @@
 import 'dart:async';
-import 'dart:collection';
+//import 'dart:collection';
 //import 'dart:html';
 import 'dart:math' show cos, sqrt, asin;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+//import 'package:geolocator/geolocator.dart';
 //import 'package:english_words/english_words.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:firebase_database/firebase_database.dart';
+//import 'package:geocoder/geocoder.dart';
+//import 'package:firebase_database/firebase_database.dart';
 import 'package:kelvindate/Functions.dart';
 import 'package:kelvindate/Users.dart';
 import 'package:kelvindate/const.dart';
 import 'fire.dart';
-import 'geolocation.dart';
+//import 'geolocation.dart';
 import 'register.dart';
 import 'forgot.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kelvindate/SplashPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:fluttertoast/fluttertoast.dart';
 
 
 class LogingState extends State
@@ -179,9 +179,7 @@ class LogingState extends State
                     // This optional block of code can be used to run
                     // code when the user saves the form.
                   },
-                  validator: (String value)
-                  {
-                  },
+
                 ),
                 ),
                 FlatButton(

@@ -1,8 +1,8 @@
+import 'package:kelvindate/Functions.dart';
 import 'package:kelvindate/const.dart';
-
-import 'geolocation.dart';
+//import 'geolocation.dart';
 import 'package:flutter/material.dart';
-import 'package:kelvindate/loging.dart';
+//import 'package:kelvindate/loging.dart';
 import 'const.dart';
 
 class ForgotState extends State {
@@ -66,10 +66,7 @@ class ForgotState extends State {
             textColor: Colors.white,
             padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => GeolocationExample()));
+              Functions.toast("here we should password reminding");
             },
           ),
         ),

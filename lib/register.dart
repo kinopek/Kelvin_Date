@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+//import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kelvindate/SplashPage.dart';
-import 'package:kelvindate/geolocation.dart';
+//import 'package:kelvindate/geolocation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Functions.dart';
-import 'loging.dart';
+//import 'loging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'fire.dart';
 import 'const.dart';
-import 'Functions.dart';
 
 class RegisterState extends State {
   // Kontrolery do przechowywanis odniesień do danych formularza.
@@ -16,7 +15,7 @@ class RegisterState extends State {
   TextEditingController emailInputController;
   TextEditingController pwdInputController;
   TextEditingController confirmPwdInputController;
-  final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
+  //final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
   static Fire f = new Fire();
 
   SharedPreferences prefs;
@@ -182,8 +181,8 @@ class RegisterState extends State {
                         password: pwdInputController.text)
                         .then((currentUser) => f.createUserRecord(loginInputController.text, emailInputController.text, currentUser.user.uid.toString())
                         .then((result) => {
-                    //  FirebaseAuth.instance.currentUser()
-                      Fire.authentic ( prefs, emailInputController, pwdInputController ),
+
+                      Fire.authentic ( prefs, emailInputController, pwdInputController, loginInputController ),
 
                       Navigator.pushAndRemoveUntil(
                           context,
@@ -200,22 +199,7 @@ class RegisterState extends State {
                   }
                   else
                   {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("Error"),
-                            content: Text("The passwords do not match"),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text("Close"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              )
-                            ],
-                          );
-                        });
+                    Functions.toast("The passwords do not match");
                   }
                 },
               ),
