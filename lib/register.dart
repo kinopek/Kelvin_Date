@@ -180,18 +180,12 @@ class RegisterState extends State {
                         .createUserWithEmailAndPassword(
                         email: emailInputController.text,
                         password: pwdInputController.text)
-                        .then((currentUser) => f.databaseReference
-                        .child('users')
-                        .child(currentUser.user.uid.toString())
-                        .set({
-                      'login': loginInputController.text,
-                      'email': emailInputController.text
-                    })
+                        .then((currentUser) => f.createUserRecord(loginInputController.text, emailInputController.text, currentUser.user.uid.toString())
                         .then((result) => {
+                    //  FirebaseAuth.instance.currentUser()
+                      Fire.authentic ( prefs, emailInputController, pwdInputController ),
 
-                     Fire.authentic ( prefs, emailInputController, pwdInputController ),
-
-                        Navigator.pushAndRemoveUntil(
+                      Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                               builder: (context) => SplashPage()),
