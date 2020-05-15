@@ -43,7 +43,7 @@ class RegisterState extends State {
           child: Column(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+                padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
                 child: TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Your login',
@@ -74,7 +74,7 @@ class RegisterState extends State {
                 ),
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+                padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
                 child: TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Your email',
@@ -105,7 +105,7 @@ class RegisterState extends State {
                 ),
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+                padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
                 child: TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Your password',
@@ -134,7 +134,7 @@ class RegisterState extends State {
                 ),
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+                padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
                 child: TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Password once again',
