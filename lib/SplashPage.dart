@@ -29,7 +29,6 @@ class _SplashPageState extends State<SplashPage> {
     FirebaseAuth.instance.onAuthStateChanged.listen((FirebaseUser user) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       if (user != null) {
-        stderr.writeln("USER UID" + user.uid);
         Navigator.push(
             context,
             MaterialPageRoute(

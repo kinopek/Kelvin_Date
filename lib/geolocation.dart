@@ -3,12 +3,14 @@ import 'dart:collection';
 
 //import 'dart:html';
 import 'dart:math' show cos, sqrt, asin;
+
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 //import 'package:english_words/english_words.dart';
 import 'package:geocoder/geocoder.dart';
+
 //import 'package:firebase_database/firebase_database.dart';
 import 'package:kelvindate/const.dart';
 import 'fire.dart';
@@ -17,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class GeolocationExampleState extends State {
   GeolocationExampleState({Key key, @required this.secondUserId});
+
   Timer timer;
 
   SharedPreferences prefs; // Przechowuje dane zalogowanego użytkownika
@@ -25,17 +28,16 @@ class GeolocationExampleState extends State {
   Geolocator _geolocator;
   Position _position; //your phone
   double _startingDistance = 100.0, _distance = 100.0;
+
   //Coordinates c = new Coordinates(51.0, 17.0); //for testing
-  Coordinates _coordinates ; //new Coordinates(
+  Coordinates _coordinates; //new Coordinates(
   //    51.1098966, 17.0326828); //rynek for now, another user later
   //  51.043,
   //  17.079); //karels house approximation, for testing.
 
   Queue<double> _dist_archive = new Queue();
-  static Fire f = new Fire();
+
   // Coordinates c2 = f.getCoordinates(secondUserId); //to get rynek from database
-
-
 
   void checkPermission() {
     _geolocator.checkGeolocationPermissionStatus().then((status) {
@@ -43,7 +45,7 @@ class GeolocationExampleState extends State {
     });
     _geolocator
         .checkGeolocationPermissionStatus(
-        locationPermission: GeolocationPermission.locationAlways)
+            locationPermission: GeolocationPermission.locationAlways)
         .then((status) {
       print('always status: $status');
     });
@@ -57,13 +59,13 @@ class GeolocationExampleState extends State {
   @override
   void initState() {
     super.initState();
-    _coordinates = f.getCoordinates(secondUserId);
 
+    getSecondCoordinates();
     getMyId();
 
     _geolocator = Geolocator();
     LocationOptions locationOptions =
-    LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
+        LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
 
     checkPermission();
     updateLocation();
@@ -75,6 +77,10 @@ class GeolocationExampleState extends State {
     });
 
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) => updateDistance());
+  }
+
+  void getSecondCoordinates() async {
+    _coordinates = await Fire.getCoordinates(secondUserId).catchError((e) {_coordinates = new Coordinates(0.0, 0.0);});
   }
 
   void getMyId() async {
@@ -101,22 +107,26 @@ class GeolocationExampleState extends State {
   }
 
   double updateDistance() {
-    if ((_coordinates.latitude!=null)&&(_coordinates.longitude!=null)&&(_position.longitude!=null)&&(_position.latitude!=null))
-    {
-      setState(() {
-        _distance = calculateDistance(_position.latitude, _position.longitude,
-            _coordinates.latitude, _coordinates.longitude);
-      }
-      );
+    if ((_coordinates != null) && (_position != null)) {
+      if ((_coordinates.latitude != null) &&
+          (_coordinates.longitude != null) &&
+          (_position.longitude != null) &&
+          (_position.latitude != null)) {
+        setState(() {
+          _distance = calculateDistance(_position.latitude, _position.longitude,
+              _coordinates.latitude, _coordinates.longitude);
+        });
 
-      _dist_archive.add(_distance);
-      if (_dist_archive.length > 10) {
-        _dist_archive.removeFirst();
-      } else if (_dist_archive.length == 1) {
-        _startingDistance = _distance;
+        _dist_archive.add(_distance);
+        if (_dist_archive.length > 10) {
+          _dist_archive.removeFirst();
+        } else if (_dist_archive.length == 1) {
+          _startingDistance = _distance;
+        }
       }
+      return _distance;
     }
-    return _distance;
+    return null;
   }
 
   double calculateDistance(lat1, lon1, lat2, lon2) {
@@ -131,6 +141,16 @@ class GeolocationExampleState extends State {
     return 12742 * asin(sqrt(a));
   }
 
+  void saveToDatabase()
+  {
+    Fire.createRecord(prefs.getString('id'), _position.latitude,  _position.longitude);
+  }
+
+  void getFromDatabase()
+  {
+    Fire.getCoordinates(secondUserId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,32 +163,32 @@ class GeolocationExampleState extends State {
           Container(
             padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 10.0),
             child: Text(
-              'Your location: ${_position.latitude != null ? _position.latitude.toStringAsPrecision(4) : 'processing'} x ${_position.longitude != null ? _position.longitude.toStringAsPrecision(4) : 'processing'}',
+              'Your location: ${_position != null ? _position.latitude.toStringAsPrecision(4) : 'processing'} x ${_position != null ? _position.longitude.toStringAsPrecision(4) : 'processing'}',
               style: TextStyle(
                   color: mainColor, fontWeight: FontWeight.bold, fontSize: 20),
             ),
           ),
-         /* Text(
+          /* Text(
 //              'My id: ${prefs != null ? prefs.getString('id') : 'poczekaj no' } , \n my date id: $secondUserId'),*/
           Text(
-              ' My date Latitude: ${_coordinates.latitude != null ? _coordinates.latitude.toString() : 'processing'},'),
+              ' My date Latitude: ${_coordinates != null ? _coordinates.latitude.toString() : 'processing'},'),
           Text(
-              ' My date Longitude: ${_coordinates.longitude != null ? _coordinates.longitude.toString() : 'processing'}'),
+              ' My date Longitude: ${_coordinates != null ? _coordinates.longitude.toString() : 'processing'}'),
           Container(
             padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 10.0),
             child: Text(
-              ' Distance: ${_position != null ? updateDistance().truncate().toString() + ' km ' + ((updateDistance() - updateDistance().truncate()) * 1000).truncate().toString() + ' m' : 'processing'}',
+              ' Distance: ${(_position != null && _coordinates != null) ? updateDistance().truncate().toString() + ' km ' + ((updateDistance() - updateDistance().truncate()) * 1000).truncate().toString() + ' m' : 'processing'}',
               style: TextStyle(
-                // color: Colors.red,
+                  // color: Colors.red,
                   fontSize: 20),
             ),
           ),
           Row(children: <Widget>[
             Expanded(
                 child: Column(children: <Widget>[
-                  Icon(Icons.place),
-                  Text('Distance', textAlign: TextAlign.center)
-                ])),
+              Icon(Icons.place),
+              Text('Distance', textAlign: TextAlign.center)
+            ])),
             Expanded(
               child: Thermometer(100.0, _distance, _startingDistance),
             ),
@@ -176,18 +196,13 @@ class GeolocationExampleState extends State {
           Column(children: <Widget>[
             RaisedButton(
               child: Text('Save to Database'),
-              onPressed: () {
-                f.createRecord(prefs.getString('id') ,_position.latitude, _position.longitude);
-              },
+              onPressed: saveToDatabase,
             ),
             RaisedButton(
               child: Text('get coordinates of a date'),
-              onPressed: (){
-                _coordinates = f.getCoordinates(secondUserId);
-              },
+              onPressed: getFromDatabase,
             )
-          ]
-          ),
+          ]),
         ]),
       ),
     );
@@ -200,7 +215,8 @@ class GeolocationExample extends StatefulWidget {
   GeolocationExample({Key key, @required this.secondUserId}) : super(key: key);
 
   @override
-  GeolocationExampleState createState() => new GeolocationExampleState(secondUserId: secondUserId);
+  GeolocationExampleState createState() =>
+      new GeolocationExampleState(secondUserId: secondUserId);
 }
 
 class Thermometer extends StatelessWidget {

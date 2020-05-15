@@ -1,4 +1,5 @@
 import 'dart:async';
+
 //import 'dart:collection';
 //import 'dart:html';
 import 'dart:math' show cos, sqrt, asin;
@@ -9,28 +10,32 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-class Fire extends State
-{
+class Fire extends State {
   final databaseReference = FirebaseDatabase.instance.reference();
 
-  static Future<FirebaseUser>  authentic (SharedPreferences prefs, TextEditingController emailInputController, TextEditingController pwdInputController, [TextEditingController loginController = null] ) async
-  {
+  static Future<FirebaseUser> authentic(
+      SharedPreferences prefs,
+      String email,
+      String password,
+      String login) async {
     FirebaseUser currentUser;
     // pobranie obiektu użykownika po zalogowaniu go mailem i hasłem.
-    FirebaseUser firebaseUser = (await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailInputController.text,password: pwdInputController.text)).user;
+    FirebaseUser firebaseUser = (await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: email,
+                password: password))
+        .user;
     if (firebaseUser != null) {
-
-      if(loginController!=null)// jeśli podano login (a dzieje się to wyłącznie przy rejestracji) to powinno podstawić za displayname
+      if (login != null) // jeśli podano login (a dzieje się to wyłącznie przy rejestracji) to powinno podstawić za displayname
       {
         UserUpdateInfo u;
-        u.displayName= loginController.text;
+        u.displayName = login;
         firebaseUser.updateProfile(u);
       }
 
-
       // Sprawdzamy czy w cloud firestore są już dane naszego użytkownika.
-      final QuerySnapshot result = await Firestore.instance.collection('users')
+      final QuerySnapshot result = await Firestore.instance
+          .collection('users')
           .where('id', isEqualTo: firebaseUser.uid)
           .getDocuments();
       final List<DocumentSnapshot> documents = result.documents;
@@ -43,53 +48,41 @@ class Fire extends State
         await prefs.setString('id', currentUser.uid);
         await prefs.setString('nickname', currentUser.displayName);
         await prefs.setString('photoUrl', currentUser.photoUrl);
-      }
-      else {
+      } else {
         // Pobranie do lokalnej pamięci danych usera bez tworzenia go w bazie, bo już istnieje.
         userToLocal(documents, prefs);
-
       }
     }
-    return  currentUser;
+    return currentUser;
   }
 
-  void createRecord(var uid, var a, var b)
-  {
-    String id = new DateTime.now().millisecondsSinceEpoch.toString();
-    databaseReference.child('users').child(uid).child('coordinates').child(id).set({
+  static void createRecord(var uid, var a, var b) {
+    Firestore.instance.collection('coordinates').document(uid).setData({
       'latitude': a,
-      'longitude':  b
-    });
-  }
-
-  Future createUserRecord(var login,var email, var uid)
-  {
-    databaseReference.child('users').child(uid).set({
-      'login': login,
-      'email':  email
+      'longitude': b,
+      'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
     });
   }
 
   static void createFStoreUser(FirebaseUser firebaseUser) {
-    Firestore.instance.collection('users')
-        .document(firebaseUser.uid)
-        .setData({
+    Firestore.instance.collection('users').document(firebaseUser.uid).setData({
       'nickname': firebaseUser.displayName,
       'photoUrl': firebaseUser.photoUrl,
       'id': firebaseUser.uid,
-      'createdAt': DateTime
-          .now()
-          .millisecondsSinceEpoch
-          .toString(),
+      'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
       'chattingWith': null
     });
   }
-    Coordinates getCoordinates(String id )
-  {
 
-    databaseReference.child('users').child(id).orderByChild('coordinates').limitToLast (1);// as Coordinates;
+  static Future<Coordinates> getCoordinates(String id) async {
+    final QuerySnapshot result = await Firestore.instance
+        .collection('coordinates')
+        .where('id', isEqualTo: id)
+        .getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
 
-    Coordinates c= new Coordinates(51.0, 17.0);
+    Coordinates c =
+        new Coordinates(documents[0]['latitude'], documents[0]['longitude']);
     return c;
   }
 
@@ -99,13 +92,11 @@ class Fire extends State
     return null;
   }
 
-  static Future<void> userToLocal(List<DocumentSnapshot> documents, SharedPreferences  prefs) async
-  {
+  static Future<void> userToLocal(
+      List<DocumentSnapshot> documents, SharedPreferences prefs) async {
     await prefs.setString('id', documents[0]['id']);
     await prefs.setString('nickname', documents[0]['nickname']);
     await prefs.setString('photoUrl', documents[0]['photoUrl']);
     await prefs.setString('aboutMe', documents[0]['aboutMe']);
   }
-
-
 }

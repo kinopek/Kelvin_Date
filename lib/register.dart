@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+
 //import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kelvindate/SplashPage.dart';
+
 //import 'package:kelvindate/geolocation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Functions.dart';
+
 //import 'loging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'fire.dart';
@@ -15,12 +18,9 @@ class RegisterState extends State {
   TextEditingController emailInputController;
   TextEditingController pwdInputController;
   TextEditingController confirmPwdInputController;
+
   //final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
-  static Fire f = new Fire();
-
   SharedPreferences prefs;
-
-
 
   @override
   initState() {
@@ -31,6 +31,29 @@ class RegisterState extends State {
     super.initState();
   }
 
+  void registerUser() {
+    if (pwdInputController.text == confirmPwdInputController.text) {
+      FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: emailInputController.text,
+              password: pwdInputController.text)
+          .then((result) => {
+                Fire.authentic(prefs, emailInputController.text,
+                    pwdInputController.text, loginInputController.text),
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => SplashPage()),
+                    (_) => false),
+                loginInputController.clear(),
+                emailInputController.clear(),
+                pwdInputController.clear(),
+                confirmPwdInputController.clear()
+              })
+          .catchError((e) => Functions.toast(e.message));
+    } else {
+      Functions.toast("The passwords do not match");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,44 +195,13 @@ class RegisterState extends State {
                 splashColor: Colors.transparent,
                 textColor: Colors.white,
                 padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
-                onPressed: () {
-                  if (pwdInputController.text ==
-                      confirmPwdInputController.text) {
-                    FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
-                        email: emailInputController.text,
-                        password: pwdInputController.text)
-                        .then((currentUser) => f.createUserRecord(loginInputController.text, emailInputController.text, currentUser.user.uid.toString())
-                        .then((result) => {
-
-                      Fire.authentic ( prefs, emailInputController, pwdInputController, loginInputController ),
-
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SplashPage()),
-                              (_) => false),
-                      loginInputController.clear(),
-                      emailInputController.clear(),
-                      pwdInputController.clear(),
-                      confirmPwdInputController.clear()
-                    })
-                        .catchError((e) => Functions.toast( e.message)))
-                        .catchError((err) => Functions.toast( err.message));
-                  }
-                  else
-                  {
-                    Functions.toast("The passwords do not match");
-                  }
-                },
+                onPressed: registerUser,
               ),
             ],
           ),
         ));
   }
 }
-
-
 
 class Register extends StatefulWidget {
   @override

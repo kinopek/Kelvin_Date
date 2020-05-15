@@ -95,7 +95,7 @@ class LogingState extends State {
         .user;
     if (firebaseUser != null) {
       currentUser =
-          await Fire.authentic(prefs, emailInputController, pwdInputController);
+          await Fire.authentic(prefs, emailInputController.text, pwdInputController.text, null);
 
       Functions.toast("Sign in success");
       this.setState(() {
