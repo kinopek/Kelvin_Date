@@ -17,21 +17,33 @@ class Fire extends State {
       SharedPreferences prefs,
       String email,
       String password,
-      String login) async {
+      String login) async
+  {
     FirebaseUser currentUser;
     // pobranie obiektu użykownika po zalogowaniu go mailem i hasłem.
     FirebaseUser firebaseUser = (await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: email,
-                password: password))
+        .signInWithEmailAndPassword(
+        email: email,
+        password: password))
         .user;
-    if (firebaseUser != null) {
+
+    if (firebaseUser != null)
+    {
+
+      /*
       if (login != null) // jeśli podano login (a dzieje się to wyłącznie przy rejestracji) to powinno podstawić za displayname
-      {
-        UserUpdateInfo u;
-        u.displayName = login;
+          {
+        UserUpdateInfo u = UserUpdateInfo();
+        u.displayName=(login);
         firebaseUser.updateProfile(u);
       }
+*/
+
+
+
+
+
+
 
       // Sprawdzamy czy w cloud firestore są już dane naszego użytkownika.
       final QuerySnapshot result = await Firestore.instance
@@ -42,11 +54,11 @@ class Fire extends State {
 
       if (documents.length == 0) {
         // Wrzucenie na serwer danych, jeżeli ich tam jeszcze nie ma.
-        createFStoreUser(firebaseUser);
+        createFStoreUser(firebaseUser, login);
         // Pobranie do lokalnej pamięci danych usera.
         currentUser = firebaseUser;
         await prefs.setString('id', currentUser.uid);
-        await prefs.setString('nickname', currentUser.displayName);
+        await prefs.setString('nickname', login);
         await prefs.setString('photoUrl', currentUser.photoUrl);
       } else {
         // Pobranie do lokalnej pamięci danych usera bez tworzenia go w bazie, bo już istnieje.
@@ -64,9 +76,9 @@ class Fire extends State {
     });
   }
 
-  static void createFStoreUser(FirebaseUser firebaseUser) {
+  static void createFStoreUser(FirebaseUser firebaseUser, String login) {
     Firestore.instance.collection('users').document(firebaseUser.uid).setData({
-      'nickname': firebaseUser.displayName,
+      'nickname': login,
       'photoUrl': firebaseUser.photoUrl,
       'id': firebaseUser.uid,
       'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
@@ -82,7 +94,7 @@ class Fire extends State {
     final List<DocumentSnapshot> documents = result.documents;
 
     Coordinates c =
-        new Coordinates(documents[0]['latitude'], documents[0]['longitude']);
+    new Coordinates(documents[0]['latitude'], documents[0]['longitude']);
     return c;
   }
 

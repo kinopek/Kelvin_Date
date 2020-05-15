@@ -10,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 
 //import 'package:english_words/english_words.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:kelvindate/Functions.dart';
 
 //import 'package:firebase_database/firebase_database.dart';
 import 'package:kelvindate/const.dart';
@@ -146,11 +147,16 @@ class GeolocationExampleState extends State {
     Fire.createRecord(prefs.getString('id'), _position.latitude,  _position.longitude);
   }
 
-  void getFromDatabase()
-  {
-    Fire.getCoordinates(secondUserId);
-  }
+   getFromDatabase()
+   async {
+      _coordinates = await Fire.getCoordinates(secondUserId);
+      refreshAfterGet();
+   }
 
+   void refreshAfterGet()
+   {
+     setState((){_coordinates=_coordinates;});
+   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -201,6 +207,7 @@ class GeolocationExampleState extends State {
             RaisedButton(
               child: Text('get coordinates of a date'),
               onPressed: getFromDatabase,
+
             )
           ]),
         ]),
