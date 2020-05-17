@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'const.dart';
 import 'settings.dart';
 import 'chat.dart';
@@ -18,6 +19,7 @@ import 'chat.dart';
 class UsersState extends State {
   UsersState({Key key, @required this.currentUserId});
 
+  SharedPreferences prefs;
   // zmienne jakieś.
   final String currentUserId;
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
@@ -79,10 +81,17 @@ class UsersState extends State {
   }
 
   // Kiknięcie w coś w menu.
-  void onItemMenuPress(Choice choice) {
+  Future<void> onItemMenuPress(Choice choice) async {
     if (choice.title == 'Log out') {
       FirebaseAuth.instance.signOut();
+      prefs = await SharedPreferences.getInstance();
+
+      if(prefs!=null)
+      {
+        await prefs.clear();
+      }
       Navigator.pushReplacementNamed(context, "/login");
+
     } else {
       // Otworzenie edycji użytkownika.
       Navigator.push(

@@ -31,8 +31,14 @@ class RegisterState extends State {
     super.initState();
   }
 
-  void registerUser() {
+  Future<void> registerUser() async {
     if (pwdInputController.text == confirmPwdInputController.text) {
+      prefs = await SharedPreferences.getInstance();
+      if(prefs!=null)
+        {
+          await prefs.clear();
+        }
+
       FirebaseAuth.instance
           .createUserWithEmailAndPassword(
               email: emailInputController.text,

@@ -52,18 +52,20 @@ class Fire extends State {
           .getDocuments();
       final List<DocumentSnapshot> documents = result.documents;
 
-      if (documents.length == 0) {
+      if (documents.length == 0)
+      {
         // Wrzucenie na serwer danych, jeżeli ich tam jeszcze nie ma.
         createFStoreUser(firebaseUser, login);
-        // Pobranie do lokalnej pamięci danych usera.
-        currentUser = firebaseUser;
-        await prefs.setString('id', currentUser.uid);
-        await prefs.setString('nickname', login);
-        await prefs.setString('photoUrl', currentUser.photoUrl);
-      } else {
-        // Pobranie do lokalnej pamięci danych usera bez tworzenia go w bazie, bo już istnieje.
-        userToLocal(documents, prefs);
       }
+      // Pobranie do lokalnej pamięci danych usera.
+      await prefs.setString('id', firebaseUser.uid);
+      await prefs.setString('nickname', login);
+      await prefs.setString('photoUrl', firebaseUser.photoUrl);
+      //else { usuwam elsa żeby zawsze na koniec ściągało do lokalnych
+        // Pobranie do lokalnej pamięci danych usera bez tworzenia go w bazie, bo już istnieje.
+      currentUser = firebaseUser;
+        userToLocal(documents, prefs);
+     // }
     }
     return currentUser;
   }

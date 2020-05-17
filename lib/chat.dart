@@ -106,10 +106,10 @@ class ChatScreenState extends State<ChatScreen> {
     groupChatId = '';
     // Nie wiem.
     isLoading = false;
-    isShowSticker = true;
+    isShowSticker = false;
     imageUrl = '';
 
-    // Pobranie lokalnego czegoś - chyba danych zalogowanego użytkownika.
+    // Pobranie lokalnych danych zalogowanego użytkownika.
     readLocal();
   }
 
@@ -126,7 +126,7 @@ class ChatScreenState extends State<ChatScreen> {
   // Funkcja wczytania danych zalogowanego użytkownika?
   readLocal() async {
     prefs = await SharedPreferences.getInstance();
-    id = prefs.getString('id') ?? '';
+    id = prefs.getString('id') ?? '';//tutaj musi ściągnąć id z bazy
     if (id.hashCode <= peerId.hashCode) {
       groupChatId = '$id-$peerId';
     } else {
@@ -531,29 +531,29 @@ class ChatScreenState extends State<ChatScreen> {
           Row(
             children: <Widget>[
               FlatButton(
-                onPressed: () => onSendMessage('pic/logo4.png', 2),
+                onPressed: () => onSendMessage('pic/COOL.png', 2),
                 child: new Image.asset(
-                  'pic/logo4.png',
+                  'pic/COOL.png',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.cover,
                 ),
               ),
               FlatButton(
-                onPressed: () => onSendMessage('pic/logo3.png', 2),
+                onPressed: () => onSendMessage('pic/NO.png', 2),
                 child: new Image.asset(
                   //'images/mimi2.gif',
-                  'pic/logo3.png',
+                  'pic/NO.png',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.cover,
                 ),
               ),
               FlatButton(
-                onPressed: () => onSendMessage('pic/logo2.png', 2),
+                onPressed: () => onSendMessage('pic/OK.png', 2),
                 child: new Image.asset(
                   //'images/mimi3.gif',
-                  'pic/logo2.png',
+                  'pic/OK.png',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.cover,
