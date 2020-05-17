@@ -106,7 +106,7 @@ class ChatScreenState extends State<ChatScreen> {
     groupChatId = '';
     // Nie wiem.
     isLoading = false;
-    isShowSticker = false;
+    isShowSticker = true;
     imageUrl = '';
 
     // Pobranie lokalnego czegoś - chyba danych zalogowanego użytkownika.
@@ -306,7 +306,8 @@ class ChatScreenState extends State<ChatScreen> {
                   // Sticker
                   : Container(
                       child: new Image.asset(
-                        'images/${document['content']}.gif',
+                      //  'images/${document['content']}.gif',
+                        '${document['content']}',
                         width: 100.0,
                         height: 100.0,
                         fit: BoxFit.cover,
@@ -530,27 +531,29 @@ class ChatScreenState extends State<ChatScreen> {
           Row(
             children: <Widget>[
               FlatButton(
-                onPressed: () => onSendMessage('mimi1', 2),
+                onPressed: () => onSendMessage('pic/logo4.png', 2),
                 child: new Image.asset(
-                  'images/mimi1.gif',
+                  'pic/logo4.png',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.cover,
                 ),
               ),
               FlatButton(
-                onPressed: () => onSendMessage('mimi2', 2),
+                onPressed: () => onSendMessage('pic/logo3.png', 2),
                 child: new Image.asset(
-                  'images/mimi2.gif',
+                  //'images/mimi2.gif',
+                  'pic/logo3.png',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.cover,
                 ),
               ),
               FlatButton(
-                onPressed: () => onSendMessage('mimi3', 2),
+                onPressed: () => onSendMessage('pic/logo2.png', 2),
                 child: new Image.asset(
-                  'images/mimi3.gif',
+                  //'images/mimi3.gif',
+                  'pic/logo2.png',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.cover,
@@ -558,7 +561,7 @@ class ChatScreenState extends State<ChatScreen> {
               )
             ],
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          ),
+          ),/*
           Row(
             children: <Widget>[
               FlatButton(
@@ -622,7 +625,7 @@ class ChatScreenState extends State<ChatScreen> {
               )
             ],
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          )
+          )*/
         ],
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       ),
