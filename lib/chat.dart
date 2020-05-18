@@ -339,7 +339,7 @@ class ChatScreenState extends State<ChatScreen> {
                             height: 35.0,
                             padding: EdgeInsets.all(10.0),
                           ),
-                          imageUrl: peerAvatar,
+                          imageUrl: peerAvatar != null ?peerAvatar:'images/img_not_available.jpeg',
                           width: 35.0,
                           height: 35.0,
                           fit: BoxFit.cover,
@@ -418,7 +418,7 @@ class ChatScreenState extends State<ChatScreen> {
                           )
                         : Container(
                             child: new Image.asset(
-                              'images/${document['content']}.gif',
+                              '${document['content']}',
                               width: 100.0,
                               height: 100.0,
                               fit: BoxFit.cover,
