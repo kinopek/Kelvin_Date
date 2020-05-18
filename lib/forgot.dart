@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kelvindate/Functions.dart';
 import 'package:kelvindate/const.dart';
 //import 'geolocation.dart';
@@ -6,6 +7,23 @@ import 'package:flutter/material.dart';
 import 'const.dart';
 
 class ForgotState extends State {
+  TextEditingController emailInputController;
+
+  @override
+  initState() {
+    emailInputController = new TextEditingController();
+    super.initState();
+  }
+
+  Future<void> sendResetPasswordMail() async
+  {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: emailInputController.text).catchError((e) {
+      Functions.toast("No user with this e-mail found, sorry...");
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +47,7 @@ class ForgotState extends State {
               icon: Icon(Icons.person),
               hintText: 'Please enter your email address',
             ),
+            controller: emailInputController,
             onChanged: (val) {
               final trimVal = val.trim();
               if (val != trimVal)
@@ -65,9 +84,7 @@ class ForgotState extends State {
             splashColor: Colors.transparent,
             textColor: Colors.white,
             padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
-            onPressed: () {
-              Functions.toast("here we should password reminding");
-            },
+            onPressed: sendResetPasswordMail,
           ),
         ),
       ])),
