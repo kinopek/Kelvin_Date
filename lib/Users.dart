@@ -377,6 +377,7 @@ class UsersState extends State {
                     builder: (context) => Chat(
                           peerId: document.documentID,
                           peerAvatar: document['photoUrl'],
+                          peerName: document['nickname'],
                         )));
           },
           color: mainColor,

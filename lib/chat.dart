@@ -17,20 +17,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Chat extends StatelessWidget {
   final String peerId;
   final String peerAvatar;
+  final String peerName;
 
-  // Konstrukor czatu z podaniem id i avaterem rozmówcy.
-  Chat({Key key, @required this.peerId, @required this.peerAvatar})
+  // Konstrukor czatu z podaniem id i avaterem rozmówcy i nickiem.
+  Chat({Key key, @required this.peerId, @required this.peerAvatar, @required this.peerName})
       : super(key: key);
+
+
 
   // Budowa UI.
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(
-          'Chat',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
+
+        title: Row
+          ( children: <Widget>[
+
+          showAvatar(),
+          new Text(
+            peerName,
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          )
+        ]),
+
+
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.not_listed_location, color: Colors.white),
@@ -43,6 +54,7 @@ class Chat extends StatelessWidget {
                       )));
             },
           ),
+
         ],
         backgroundColor: mainColor,
         centerTitle: false,
@@ -53,6 +65,39 @@ class Chat extends StatelessWidget {
       ),
     );
   }
+
+  Material showAvatar()
+  {
+    return Material(
+      child: peerAvatar != null
+          ? CachedNetworkImage(
+        placeholder: (context, url) => Container(
+          child: CircularProgressIndicator(
+            strokeWidth: 10.0,
+            valueColor:
+            AlwaysStoppedAnimation<Color>(secondaryColor),
+          ),
+          width: 50.0,
+          height: 50.0,
+          padding: EdgeInsets.all(1.0),
+        ),
+        imageUrl: peerAvatar,
+        width: 50.0,
+        height: 50.0,
+        fit: BoxFit.cover,
+      )
+          : Icon(
+        Icons.account_circle,
+        size: 50.0,
+        color: secondaryColor,
+      ),
+      borderRadius: BorderRadius.all(Radius.circular(25.0)),
+      clipBehavior: Clip.hardEdge,
+    );
+  }
+
+
+
 }
 
 // Ekran czatu.
