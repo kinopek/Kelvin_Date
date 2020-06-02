@@ -88,7 +88,8 @@ class Fire extends State {
     });
   }
 
-  static Future<Coordinates> getCoordinates(String id) async {
+  static Future<Coordinates> getCoordinates(String id) async
+  {
     final QuerySnapshot result = await Firestore.instance
         .collection('coordinates')
         .where('id', isEqualTo: id)

@@ -80,8 +80,24 @@ class GeolocationExampleState extends State {
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) => updateDistance());
   }
 
-  void getSecondCoordinates() async {
-    _coordinates = await Fire.getCoordinates(secondUserId).catchError((e) {_coordinates = new Coordinates(0.0, 0.0);});
+  void getSecondCoordinates() async
+  {
+    _coordinates = await Fire.getCoordinates(secondUserId).
+    catchError((e)
+    {
+      _coordinates = new Coordinates(0.0, 0.0);
+    }
+    );
+    refreshAfterGet();
+  }
+ /* getFromDatabase()
+  async {
+    _coordinates = await Fire.getCoordinates(secondUserId);
+    refreshAfterGet();
+  }*/
+  void refreshAfterGet()
+  {
+    setState((){_coordinates=_coordinates;});
   }
 
   void getMyId() async {
@@ -147,16 +163,10 @@ class GeolocationExampleState extends State {
     Fire.createRecord(prefs.getString('id'), _position.latitude,  _position.longitude);
   }
 
-   getFromDatabase()
-   async {
-      _coordinates = await Fire.getCoordinates(secondUserId);
-      refreshAfterGet();
-   }
 
-   void refreshAfterGet()
-   {
-     setState((){_coordinates=_coordinates;});
-   }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,7 +216,7 @@ class GeolocationExampleState extends State {
             ),
             RaisedButton(
               child: Text('get coordinates of a date'),
-              onPressed: getFromDatabase,
+              onPressed: getSecondCoordinates// getFromDatabase,
 
             )
           ]),

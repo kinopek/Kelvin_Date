@@ -133,6 +133,7 @@ class LogingState extends State {
             Container(
               padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
               child: TextFormField(
+                enableSuggestions:true,
                 decoration: InputDecoration(
                   labelText: 'Your e-mail:',
                   icon: Icon(Icons.person),
@@ -163,6 +164,8 @@ class LogingState extends State {
             Container(
               padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
               child: TextFormField(
+                enableSuggestions:true,
+                obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Your Password:',
                   icon: Icon(Icons.lock),

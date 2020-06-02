@@ -105,6 +105,7 @@ class RegisterState extends State {
               Container(
                 padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
                 child: TextFormField(
+                  enableSuggestions:true,
                   decoration: InputDecoration(
                     labelText: 'Your email',
                     icon: Icon(Icons.person),
@@ -136,6 +137,7 @@ class RegisterState extends State {
               Container(
                 padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
                 child: TextFormField(
+                  obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Your password',
                     icon: Icon(Icons.lock),
@@ -165,6 +167,7 @@ class RegisterState extends State {
               Container(
                 padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
                 child: TextFormField(
+                  obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password once again',
                     icon: Icon(Icons.lock),
