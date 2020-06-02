@@ -192,7 +192,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                             height: 90.0,
                             padding: EdgeInsets.all(20.0),
                           ),
-                          imageUrl: photoUrl,
+                          imageUrl: photoUrl != null ? photoUrl:'images/img_not_available.jpeg',
                           width: 90.0,
                           height: 90.0,
                           fit: BoxFit.cover,

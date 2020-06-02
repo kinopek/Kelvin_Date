@@ -5,7 +5,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:kelvindate/Friends.dart';
 import 'package:kelvindate/geolocation.dart';
+import 'Functions.dart';
 import 'const.dart';
 import 'fullPhoto.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,28 +22,25 @@ class Chat extends StatelessWidget {
   final String peerName;
 
   // Konstrukor czatu z podaniem id i avaterem rozmówcy i nickiem.
-  Chat({Key key, @required this.peerId, @required this.peerAvatar, @required this.peerName})
+  Chat(
+      {Key key,
+      @required this.peerId,
+      @required this.peerAvatar,
+      @required this.peerName})
       : super(key: key);
-
-
 
   // Budowa UI.
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-
-        title: Row
-          ( children: <Widget>[
-
+        title: Row(children: <Widget>[
           showAvatar(),
           new Text(
             peerName,
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           )
         ]),
-
-
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.not_listed_location, color: Colors.white),
@@ -50,11 +49,10 @@ class Chat extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => GeolocationExample(
-                        secondUserId: peerId,
-                      )));
+                            secondUserId: peerId,
+                          )));
             },
           ),
-
         ],
         backgroundColor: mainColor,
         centerTitle: false,
@@ -66,38 +64,33 @@ class Chat extends StatelessWidget {
     );
   }
 
-  Material showAvatar()
-  {
+  Material showAvatar() {
     return Material(
       child: peerAvatar != null
           ? CachedNetworkImage(
-        placeholder: (context, url) => Container(
-          child: CircularProgressIndicator(
-            strokeWidth: 10.0,
-            valueColor:
-            AlwaysStoppedAnimation<Color>(secondaryColor),
-          ),
-          width: 50.0,
-          height: 50.0,
-          padding: EdgeInsets.all(1.0),
-        ),
-        imageUrl: peerAvatar,
-        width: 50.0,
-        height: 50.0,
-        fit: BoxFit.cover,
-      )
+              placeholder: (context, url) => Container(
+                child: CircularProgressIndicator(
+                  strokeWidth: 10.0,
+                  valueColor: AlwaysStoppedAnimation<Color>(secondaryColor),
+                ),
+                width: 50.0,
+                height: 50.0,
+                padding: EdgeInsets.all(1.0),
+              ),
+              imageUrl: peerAvatar,
+              width: 50.0,
+              height: 50.0,
+              fit: BoxFit.cover,
+            )
           : Icon(
-        Icons.account_circle,
-        size: 50.0,
-        color: secondaryColor,
-      ),
+              Icons.account_circle,
+              size: 50.0,
+              color: secondaryColor,
+            ),
       borderRadius: BorderRadius.all(Radius.circular(25.0)),
       clipBehavior: Clip.hardEdge,
     );
   }
-
-
-
 }
 
 // Ekran czatu.
@@ -158,6 +151,36 @@ class ChatScreenState extends State<ChatScreen> {
     readLocal();
   }
 
+  void CheckFriends() async {
+    Firestore.instance
+        .collection("messages")
+        .document(groupChatId)
+        .get()
+        .then((value) {
+      if (value.data == null) {
+        var documentReference =
+            Firestore.instance.collection('messages').document(groupChatId);
+        Firestore.instance.runTransaction((transaction) async {
+          await transaction.set(
+            documentReference,
+            {
+              'friends': false,
+              'invite' : false,
+            },
+          );
+        });
+        Functions.toast("You are not friends yet!");
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => Friends(id: peerId, groupChatId: groupChatId,)));
+      }
+      if (value.data['friends'] == false) {
+        Functions.toast("You are not friends yet!");
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => Friends(id: peerId, groupChatId: groupChatId,)));
+      }
+    });
+  }
+
   // To jest coś z wysyłaniem naklejek.
   void onFocusChange() {
     if (focusNode.hasFocus) {
@@ -171,12 +194,14 @@ class ChatScreenState extends State<ChatScreen> {
   // Funkcja wczytania danych zalogowanego użytkownika?
   readLocal() async {
     prefs = await SharedPreferences.getInstance();
-    id = prefs.getString('id') ?? '';//tutaj musi ściągnąć id z bazy
+    id = prefs.getString('id') ?? ''; //tutaj musi ściągnąć id z bazy
     if (id.hashCode <= peerId.hashCode) {
       groupChatId = '$id-$peerId';
     } else {
       groupChatId = '$peerId-$id';
     }
+
+    CheckFriends();
 
     // Zapisujemy z kim aktualnie rozmawia zalogowany użytkownik.
     Firestore.instance
@@ -351,7 +376,7 @@ class ChatScreenState extends State<ChatScreen> {
                   // Sticker
                   : Container(
                       child: new Image.asset(
-                      //  'images/${document['content']}.gif',
+                        //  'images/${document['content']}.gif',
                         '${document['content']}',
                         width: 100.0,
                         height: 100.0,
@@ -384,7 +409,9 @@ class ChatScreenState extends State<ChatScreen> {
                             height: 35.0,
                             padding: EdgeInsets.all(10.0),
                           ),
-                          imageUrl: peerAvatar != null ?peerAvatar:'images/img_not_available.jpeg',
+                          imageUrl: peerAvatar != null
+                              ? peerAvatar
+                              : 'images/img_not_available.jpeg',
                           width: 35.0,
                           height: 35.0,
                           fit: BoxFit.cover,
@@ -606,7 +633,7 @@ class ChatScreenState extends State<ChatScreen> {
               )
             ],
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          ),/*
+          ), /*
           Row(
             children: <Widget>[
               FlatButton(
