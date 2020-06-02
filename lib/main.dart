@@ -22,7 +22,7 @@ class MyApp  extends StatelessWidget
           '/home': (BuildContext context) => Users(currentUserId: prefs.get('id'),),
           '/login': (BuildContext context) => Loging(),
           '/register': (BuildContext context) => Register(),
-          '/users': (BuildContext context) => Users(currentUserId: prefs.get('id'),),
+          '/users': (BuildContext context) => Users(currentUserId: prefs.get('id'), sortOrder: prefs.get('sort')),
           '/geo': (BuildContext context) => GeolocationExample(secondUserId: prefs.get('chattingWith'),),
 
         });

@@ -18,7 +18,7 @@ import 'chat.dart';
 
 // Okno z listą użytkowników do czatowania.
 class UsersState extends State {
-  UsersState({Key key, @required this.currentUserId});
+  UsersState({Key key, @required this.currentUserId, @required this.sortOrder});
   int sortOrder = 0;
   SharedPreferences prefs;
   // zmienne jakieś.
@@ -101,13 +101,20 @@ class UsersState extends State {
       Navigator.pushReplacementNamed(context, "/login");
     } else if (choice.title == 'Sort by Name') {
       setState((sortBy(0)));
-      build;
+
+      Navigator.pushReplacementNamed(context, "/users");
     } else if (choice.title == 'Sort by id') {
       setState((sortBy(1)));
+      Navigator.pushReplacementNamed(context, "/users");
+
     } else if (choice.title == 'Sort by photo') {
       setState((sortBy(2)));
+      Navigator.pushReplacementNamed(context, "/users");
+
     } else if (choice.title == 'Sort by creation date') {
       setState((sortBy(3)));
+      Navigator.pushReplacementNamed(context, "/users");
+
     } else {
       // Otworzenie edycji użytkownika.
       Navigator.push(
@@ -490,6 +497,7 @@ class UsersState extends State {
 
   sortBy(int i) {
     sortOrder = i;
+    prefs.setInt('sort', sortOrder);
   }
 
   Stream<QuerySnapshot> dataShot(int i) {
@@ -520,11 +528,11 @@ class UsersState extends State {
 
 class Users extends StatefulWidget {
   final String currentUserId;
-
-  Users({Key key, @required this.currentUserId}) : super(key: key);
+  final int sortOrder;
+  Users({Key key, @required this.currentUserId, @required this.sortOrder}) : super(key: key);
 
   @override
-  UsersState createState() => new UsersState(currentUserId: currentUserId);
+  UsersState createState() => new UsersState(currentUserId: currentUserId, sortOrder: sortOrder);
 }
 
 class Choice {
