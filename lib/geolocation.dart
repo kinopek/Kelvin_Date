@@ -5,6 +5,7 @@ import 'dart:collection';
 import 'dart:math' show cos, sqrt, asin;
 
 //import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -63,6 +64,8 @@ class GeolocationExampleState extends State {
 
     getSecondCoordinates();
     getMyId();
+    print("coor:" + _coordinates.toString());
+
 
     _geolocator = Geolocator();
     LocationOptions locationOptions =
@@ -77,17 +80,21 @@ class GeolocationExampleState extends State {
       _position = position;
     });
 
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => getSecondCoordinates());
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) => updateDistance());
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => saveToDatabase());
   }
 
   void getSecondCoordinates() async
   {
-    _coordinates = await Fire.getCoordinates(secondUserId).
-    catchError((e)
-    {
-      _coordinates = new Coordinates(0.0, 0.0);
-    }
-    );
+    Firestore.instance
+        .collection("coordinates")
+        .document(secondUserId)
+        .get()
+        .then((value) {
+      _coordinates = new Coordinates(value.data['latitude'], value.data['longitude']);
+      print("coor:" + _coordinates.toString());
+    });
     refreshAfterGet();
   }
  /* getFromDatabase()
@@ -97,7 +104,7 @@ class GeolocationExampleState extends State {
   }*/
   void refreshAfterGet()
   {
-    setState((){_coordinates=_coordinates;});
+    setState((){});
   }
 
   void getMyId() async {
@@ -161,11 +168,8 @@ class GeolocationExampleState extends State {
   void saveToDatabase()
   {
     Fire.createRecord(prefs.getString('id'), _position.latitude,  _position.longitude);
+    print("saved: " +  _position.latitude.toString() +"," + _position.longitude.toString());
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -214,12 +218,7 @@ class GeolocationExampleState extends State {
               child: Text('Save to Database'),
               onPressed: saveToDatabase,
             ),
-            RaisedButton(
-              child: Text('get coordinates of a date'),
-              onPressed: getSecondCoordinates// getFromDatabase,
-
-            )
-          ]),
+                      ]),
         ]),
       ),
     );

@@ -13,23 +13,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Fire extends State {
   final databaseReference = FirebaseDatabase.instance.reference();
 
-  static Future<FirebaseUser> authentic(
-      SharedPreferences prefs,
-      String email,
-      String password,
-      String login) async
-  {
+  static Future<FirebaseUser> authentic(SharedPreferences prefs, String email,
+      String password, String login) async {
     FirebaseUser currentUser;
     // pobranie obiektu użykownika po zalogowaniu go mailem i hasłem.
     FirebaseUser firebaseUser = (await FirebaseAuth.instance
-        .signInWithEmailAndPassword(
-        email: email,
-        password: password))
+            .signInWithEmailAndPassword(email: email, password: password))
         .user;
 
-    if (firebaseUser != null)
-    {
-
+    if (firebaseUser != null) {
       /*
       if (login != null) // jeśli podano login (a dzieje się to wyłącznie przy rejestracji) to powinno podstawić za displayname
           {
@@ -39,12 +31,6 @@ class Fire extends State {
       }
 */
 
-
-
-
-
-
-
       // Sprawdzamy czy w cloud firestore są już dane naszego użytkownika.
       final QuerySnapshot result = await Firestore.instance
           .collection('users')
@@ -52,8 +38,7 @@ class Fire extends State {
           .getDocuments();
       final List<DocumentSnapshot> documents = result.documents;
 
-      if (documents.length == 0)
-      {
+      if (documents.length == 0) {
         // Wrzucenie na serwer danych, jeżeli ich tam jeszcze nie ma.
         createFStoreUser(firebaseUser, login);
       }
@@ -62,10 +47,10 @@ class Fire extends State {
       await prefs.setString('nickname', login);
       await prefs.setString('photoUrl', firebaseUser.photoUrl);
       //else { usuwam elsa żeby zawsze na koniec ściągało do lokalnych
-        // Pobranie do lokalnej pamięci danych usera bez tworzenia go w bazie, bo już istnieje.
+      // Pobranie do lokalnej pamięci danych usera bez tworzenia go w bazie, bo już istnieje.
       currentUser = firebaseUser;
-        userToLocal(documents, prefs);
-     // }
+      userToLocal(documents, prefs);
+      // }
     }
     return currentUser;
   }
@@ -88,17 +73,17 @@ class Fire extends State {
     });
   }
 
-  static Future<Coordinates> getCoordinates(String id) async
-  {
-    final QuerySnapshot result = await Firestore.instance
-        .collection('coordinates')
-        .where('id', isEqualTo: id)
-        .getDocuments();
-    final List<DocumentSnapshot> documents = result.documents;
-
-    Coordinates c =
-    new Coordinates(documents[0]['latitude'], documents[0]['longitude']);
-    return c;
+  static Future<Coordinates> getCoordinates(String id) async {
+    Firestore.instance
+        .collection("coordinates")
+        .document(id)
+        .get()
+        .then((value) {
+      Coordinates c = new Coordinates(value.data['latitude'], value.data['longitude']);
+      print("coor in fire:" + c.toString());
+      return c;
+    });
+    //Coordinates c =  new Coordinates(documents[0]['latitude'], documents[0]['longitude']);
   }
 
   @override
