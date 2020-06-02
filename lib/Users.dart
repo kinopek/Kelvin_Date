@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' show Random, asin, cos, min, sqrt;
 import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -18,7 +19,7 @@ import 'chat.dart';
 // Okno z listą użytkowników do czatowania.
 class UsersState extends State {
   UsersState({Key key, @required this.currentUserId});
-
+  int sortOrder = 0;
   SharedPreferences prefs;
   // zmienne jakieś.
   final String currentUserId;
@@ -30,8 +31,16 @@ class UsersState extends State {
 
   // Menu w prawym górnym rogu.
   List<Choice> choices = const <Choice>[
-    const Choice(title: 'Settings', icon: Icons.settings),
-    const Choice(title: 'Log out', icon: Icons.exit_to_app),
+    const Choice(title: 'Settings', icon: Icons.settings, value: 5),
+    const Choice(title: 'Log out', icon: Icons.exit_to_app, value: 6),
+  ];
+//Menu sortowania
+  List<Choice> sorten = const <Choice>[
+    const Choice(title: 'Sort by Name', icon: Icons.person, value: 0),
+    const Choice(title: 'Sort by id', icon: Icons.account_balance, value: 1),
+    const Choice(title: 'Sort by photo', icon: Icons.photo_camera, value: 2),
+    const Choice(
+        title: 'Sort by creation date', icon: Icons.date_range, value: 3),
   ];
 
   @override
@@ -86,12 +95,19 @@ class UsersState extends State {
       FirebaseAuth.instance.signOut();
       prefs = await SharedPreferences.getInstance();
 
-      if(prefs!=null)
-      {
+      if (prefs != null) {
         await prefs.clear();
       }
       Navigator.pushReplacementNamed(context, "/login");
-
+    } else if (choice.title == 'Sort by Name') {
+      setState((sortBy(0)));
+      build;
+    } else if (choice.title == 'Sort by id') {
+      setState((sortBy(1)));
+    } else if (choice.title == 'Sort by photo') {
+      setState((sortBy(2)));
+    } else if (choice.title == 'Sort by creation date') {
+      setState((sortBy(3)));
     } else {
       // Otworzenie edycji użytkownika.
       Navigator.push(
@@ -261,15 +277,39 @@ class UsersState extends State {
               }).toList();
             },
           ),
+          PopupMenuButton<Choice>(
+            onSelected: onItemMenuPress,
+            itemBuilder: (BuildContext context) {
+              return sorten.map((Choice choice) {
+                return PopupMenuItem<Choice>(
+                    value: choice,
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          choice.icon,
+                          color: mainColor,
+                        ),
+                        Container(
+                          width: 10.0,
+                        ),
+                        Text(
+                          choice.title,
+                        ),
+                      ],
+                    ));
+              }).toList();
+            },
+          ),
         ],
       ),
       body: WillPopScope(
         child: Stack(
           children: <Widget>[
             // List
+
             Container(
               child: StreamBuilder(
-                stream: Firestore.instance.collection('users').snapshots(),
+                stream: dataShot(sortOrder),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
@@ -278,6 +318,7 @@ class UsersState extends State {
                       ),
                     );
                   } else {
+                    snapshot.data.documents;
                     return ListView.builder(
                       padding: EdgeInsets.all(10.0),
                       itemBuilder: (context, index) =>
@@ -308,6 +349,63 @@ class UsersState extends State {
       ),
     );
   }
+
+/*
+  Row sortButtons()
+  {
+    return Row(
+      children: <Widget>[
+      FlatButton(
+        onPressed: sortBy(0),
+        child: Text(
+          'Sort by Name',
+          style: TextStyle(fontSize: 13.0),
+        ),
+        color: mainColor,
+        highlightColor: secondaryColor,
+        splashColor: Colors.transparent,
+        textColor: Colors.white,
+        padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+      ),
+        FlatButton(
+          onPressed: sortBy(1),
+          child: Text(
+            'Sort by id',
+            style: TextStyle(fontSize: 13.0),
+          ),
+          color: mainColor,
+          highlightColor: secondaryColor,
+          splashColor: Colors.transparent,
+          textColor: Colors.white,
+          padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+        ),
+        FlatButton(
+          onPressed: sortBy(2),
+          child: Text(
+            'Sort by photo',
+            style: TextStyle(fontSize: 13.0),
+          ),
+          color: mainColor,
+          highlightColor: secondaryColor,
+          splashColor: Colors.transparent,
+          textColor: Colors.white,
+          padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+        ),
+        FlatButton(
+          onPressed: sortBy(3),
+          child: Text(
+            'Sort by creation',
+            style: TextStyle(fontSize: 13.0),
+          ),
+          color: mainColor,
+          highlightColor: secondaryColor,
+          splashColor: Colors.transparent,
+          textColor: Colors.white,
+          padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+        ),
+    ]);
+  }
+*/
 
   Widget buildItem(BuildContext context, DocumentSnapshot document) {
     if (document['id'] == currentUserId) {
@@ -389,6 +487,35 @@ class UsersState extends State {
       );
     }
   }
+
+  sortBy(int i) {
+    sortOrder = i;
+  }
+
+  Stream<QuerySnapshot> dataShot(int i) {
+    if (i == 0)
+      return Firestore.instance
+          .collection('users')
+          .orderBy('nickname')
+          .snapshots();
+    if (i == 1)
+      return Firestore.instance.collection('users').orderBy('id').snapshots();
+    if (i == 2)
+      return Firestore.instance
+          .collection('users')
+          .orderBy('photoUrl')
+          .snapshots();
+    if (i == 3)
+      return Firestore.instance
+          .collection('users')
+          .orderBy('createdAt')
+          .snapshots();
+    else
+      return Firestore.instance
+          .collection('users')
+          .orderBy('nickname')
+          .snapshots();
+  }
 }
 
 class Users extends StatefulWidget {
@@ -401,8 +528,8 @@ class Users extends StatefulWidget {
 }
 
 class Choice {
-  const Choice({this.title, this.icon});
-
+  const Choice({this.title, this.icon, this.value});
+  final int value;
   final String title;
   final IconData icon;
 }
