@@ -1,19 +1,10 @@
 import 'dart:async';
 import 'dart:collection';
-
-//import 'dart:html';
 import 'dart:math' show cos, sqrt, asin;
-
-//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-
-//import 'package:english_words/english_words.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:kelvindate/Functions.dart';
-
-//import 'package:firebase_database/firebase_database.dart';
 import 'package:kelvindate/const.dart';
 import 'fire.dart';
 import 'package:flutter/widgets.dart';
@@ -29,7 +20,7 @@ class GeolocationExampleState extends State {
   String tempSecondUID;
   Geolocator _geolocator;
   Position _position; //your phone
-  double _startingDistance = 100.0, _distance = 100.0;
+  double _startingDistance = 999.0, _distance = 999.0;
 
   //Coordinates c = new Coordinates(51.0, 17.0); //for testing
   Coordinates _coordinates; //new Coordinates(
@@ -53,7 +44,7 @@ class GeolocationExampleState extends State {
     });
     _geolocator.checkGeolocationPermissionStatus(
         locationPermission: GeolocationPermission.locationWhenInUse)
-      ..then((status) {
+      .then((status) {
         print('whenInUse status: $status');
       });
   }
@@ -93,7 +84,7 @@ class GeolocationExampleState extends State {
         .get()
         .then((value) {
       _coordinates = new Coordinates(value.data['latitude'], value.data['longitude']);
-      print("coor:" + _coordinates.toString());
+     // print("coor:" + _coordinates.toString());
     });
     refreshAfterGet();
   }
@@ -180,6 +171,8 @@ class GeolocationExampleState extends State {
       ),
       body: Center(
         child: Column(children: <Widget>[
+
+         /*
           Container(
             padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 10.0),
             child: Text(
@@ -194,31 +187,40 @@ class GeolocationExampleState extends State {
               ' My date Latitude: ${_coordinates != null ? _coordinates.latitude.toString() : 'processing'},'),
           Text(
               ' My date Longitude: ${_coordinates != null ? _coordinates.longitude.toString() : 'processing'}'),
+
+
+              */
+
+          Container(
+              child: Column(children: <Widget>[
+                Icon(Icons.place),
+                Text('Distance', textAlign: TextAlign.center)
+              ])),
+
           Container(
             padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 10.0),
             child: Text(
-              ' Distance: ${(_position != null && _coordinates != null) ? updateDistance().truncate().toString() + ' km ' + ((updateDistance() - updateDistance().truncate()) * 1000).truncate().toString() + ' m' : 'processing'}',
+              '${(_position != null && _coordinates != null) ? updateDistance().truncate().toString() + ' km ' + ((updateDistance() - updateDistance().truncate()) * 100).truncate().toString() + ' m' : 'processing'}',
               style: TextStyle(
                   // color: Colors.red,
                   fontSize: 20),
             ),
           ),
           Row(children: <Widget>[
+
             Expanded(
-                child: Column(children: <Widget>[
-              Icon(Icons.place),
-              Text('Distance', textAlign: TextAlign.center)
-            ])),
-            Expanded(
-              child: Thermometer(100.0, _distance, _startingDistance),
+              child: Thermometer(300.0, _distance, _startingDistance),
             ),
           ]),
+
+          /*
           Column(children: <Widget>[
             RaisedButton(
               child: Text('Save to Database'),
               onPressed: saveToDatabase,
             ),
-                      ]),
+                      ]),*/
+
         ]),
       ),
     );
@@ -240,10 +242,10 @@ class Thermometer extends StatelessWidget {
   double thermoWidth = 10.0;
 
   Thermometer(this.thermoHeight, this.value, this.totalValue);
-
+  //thermoWidth= thermoHeight/10;
   @override
   Widget build(BuildContext context) {
-    double ratio = value / totalValue;
+    double ratio = (value / totalValue).abs();
 
     return Stack(
         alignment: AlignmentDirectional.bottomCenter,
@@ -252,7 +254,7 @@ class Thermometer extends StatelessWidget {
             bottom: thermoHeight * 0.15,
             child: Container(
               // alignment: Alignment(3.0, 3.0),//bottomCenter,
-              width: thermoWidth * 0.7,
+              width: thermoHeight * 0.07,
               height: thermoHeight,
               decoration: BoxDecoration(
                 color: secondaryColor,
@@ -263,7 +265,7 @@ class Thermometer extends StatelessWidget {
                 child: Material(
                   borderRadius: BorderRadius.circular(5),
                   child: AnimatedContainer(
-                    width: thermoWidth * 0.5,
+                    width: thermoHeight * 0.05,
                     height: (thermoHeight * (1 - ratio)).abs(),
                     duration: Duration(milliseconds: 500),
                     decoration: BoxDecoration(

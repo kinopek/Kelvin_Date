@@ -31,16 +31,18 @@ class UsersState extends State {
 
   // Menu w prawym górnym rogu.
   List<Choice> choices = const <Choice>[
-    const Choice(title: 'Settings', icon: Icons.settings, value: 5),
-    const Choice(title: 'Log out', icon: Icons.exit_to_app, value: 6),
+    const Choice(title: 'Settings', icon: Icons.settings),
+    const Choice(title: 'Log out', icon: Icons.exit_to_app),
   ];
 //Menu sortowania
   List<Choice> sorten = const <Choice>[
-    const Choice(title: 'Sort by Name', icon: Icons.person, value: 0),
-    const Choice(title: 'Sort by id', icon: Icons.account_balance, value: 1),
-    const Choice(title: 'Sort by photo', icon: Icons.photo_camera, value: 2),
-    const Choice(
-        title: 'Sort by creation date', icon: Icons.date_range, value: 3),
+    const Choice(title: 'Sort by Name', icon: Icons.person),
+    const Choice(title: 'Sort by id', icon: Icons.account_balance),
+    const Choice(title: 'Sort by photo', icon: Icons.photo_camera),
+    const Choice(title: 'Sort by creation date', icon: Icons.date_range),
+    const Choice(title: 'Sort by friended', icon: Icons.people),//nie ma jeszcze
+    const Choice(title: 'Sort by distance', icon: Icons.location_on),//tez
+
   ];
 
   @override
@@ -115,7 +117,18 @@ class UsersState extends State {
       setState((sortBy(3)));
       Navigator.pushReplacementNamed(context, "/users");
 
-    } else {
+    }
+    else if (choice.title == 'Sort by friended') {
+      setState((sortBy(4)));
+      Navigator.pushReplacementNamed(context, "/users");
+
+    }
+    else if (choice.title == 'Sort by location') {
+      setState((sortBy(5)));
+      Navigator.pushReplacementNamed(context, "/users");
+
+    }
+    else {
       // Otworzenie edycji użytkownika.
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Settings()));
@@ -500,20 +513,20 @@ class UsersState extends State {
     prefs.setInt('sort', sortOrder);
   }
 
-  Stream<QuerySnapshot> dataShot(int i) {
-    if (i == 0)
+  Stream<QuerySnapshot> dataShot(int sortType) {
+    if (sortType == 0)
       return Firestore.instance
           .collection('users')
           .orderBy('nickname')
           .snapshots();
-    if (i == 1)
+    if (sortType == 1)
       return Firestore.instance.collection('users').orderBy('id').snapshots();
-    if (i == 2)
+    if (sortType == 2)
       return Firestore.instance
           .collection('users')
           .orderBy('photoUrl')
           .snapshots();
-    if (i == 3)
+    if (sortType == 3)
       return Firestore.instance
           .collection('users')
           .orderBy('createdAt')
