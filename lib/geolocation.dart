@@ -200,7 +200,7 @@ class GeolocationExampleState extends State {
           Container(
             padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 10.0),
             child: Text(
-              '${(_position != null && _coordinates != null) ? updateDistance().truncate().toString() + ' km ' + ((updateDistance() - updateDistance().truncate()) * 100).truncate().toString() + ' m' : 'processing'}',
+              '${(_position != null && _coordinates != null) ? updateDistance().truncate().toString() + ' km ' + ((updateDistance() - updateDistance().truncate()) * 1000).truncate().toString() + ' m' : 'processing'}',
               style: TextStyle(
                   // color: Colors.red,
                   fontSize: 20),
