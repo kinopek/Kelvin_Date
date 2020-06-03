@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' show Random, asin, cos, min, sqrt;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 //import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,8 +20,9 @@ import 'chat.dart';
 // Okno z listą użytkowników do czatowania.
 class UsersState extends State {
   UsersState({Key key, @required this.currentUserId, @required this.sortOrder});
-  int sortOrder = 0;
+  int sortOrder;
   SharedPreferences prefs;
+  Stream<QuerySnapshot> stream;
   // zmienne jakieś.
   final String currentUserId;
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
@@ -45,12 +47,18 @@ class UsersState extends State {
 
   ];
 
+
   @override
   void initState() {
     super.initState();
     registerNotification();
     configLocalNotification();
-  }
+setState(() {
+  stream=establishStream(sortOrder);
+});
+
+}
+
 
   // Nie działające jeszcze powiadomienia o nowych wiadomościach - chyba, bo nie sprawdzałem.
   void registerNotification() {
@@ -103,19 +111,26 @@ class UsersState extends State {
       Navigator.pushReplacementNamed(context, "/login");
     } else if (choice.title == 'Sort by Name') {
       setState((sortBy(0)));
+      stream=establishStream(sortOrder);
 
-      Navigator.pushReplacementNamed(context, "/users");
+      //Navigator.pushReplacementNamed(context, "/users");
     } else if (choice.title == 'Sort by id') {
       setState((sortBy(1)));
-      Navigator.pushReplacementNamed(context, "/users");
+      stream=establishStream(sortOrder);
+
+      //Navigator.pushReplacementNamed(context, "/users");
 
     } else if (choice.title == 'Sort by photo') {
       setState((sortBy(2)));
-      Navigator.pushReplacementNamed(context, "/users");
+      stream=establishStream(sortOrder);
+
+//      Navigator.pushReplacementNamed(context, "/users");
 
     } else if (choice.title == 'Sort by creation date') {
       setState((sortBy(3)));
-      Navigator.pushReplacementNamed(context, "/users");
+      stream=establishStream(sortOrder);
+
+//      Navigator.pushReplacementNamed(context, "/users");
 
     }
     else if (choice.title == 'Sort by friended') {
@@ -125,7 +140,9 @@ class UsersState extends State {
     }
     else if (choice.title == 'Sort by location') {
       setState((sortBy(5)));
-      Navigator.pushReplacementNamed(context, "/users");
+      stream=establishStream(sortOrder);
+
+//      Navigator.pushReplacementNamed(context, "/users");
 
     }
     else {
@@ -329,7 +346,7 @@ class UsersState extends State {
 
             Container(
               child: StreamBuilder(
-                stream: dataShot(sortOrder),
+                stream: stream,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
@@ -337,8 +354,10 @@ class UsersState extends State {
                         valueColor: AlwaysStoppedAnimation<Color>(mainColor),
                       ),
                     );
-                  } else {
-                    snapshot.data.documents;
+                  }
+                  else
+                    {
+                    //snapshot.data.documents;
                     return ListView.builder(
                       padding: EdgeInsets.all(10.0),
                       itemBuilder: (context, index) =>
@@ -511,41 +530,57 @@ class UsersState extends State {
   sortBy(int i) {
     sortOrder = i;
     prefs.setInt('sort', sortOrder);
+    setState((){
+      stream = establishStream(sortOrder);
+    });
+
   }
 
-  Stream<QuerySnapshot> dataShot(int sortType) {
-    if (sortType == 0)
-      return Firestore.instance
-          .collection('users')
-          .orderBy('nickname')
-          .snapshots();
-    if (sortType == 1)
-      return Firestore.instance.collection('users').orderBy('id').snapshots();
-    if (sortType == 2)
-      return Firestore.instance
+  Stream<QuerySnapshot> establishStream(int sortType) {
+    if (sortType == 0){
+      setState(() {
+        stream = Firestore.instance
+            .collection('users')
+            .orderBy('nickname')
+            .snapshots();
+      });
+    }
+    else if (sortType == 1){
+      setState(() {
+      stream =  Firestore.instance.collection('users').orderBy('id').snapshots();
+      });
+    }
+    else if (sortType == 2){
+        setState(() {
+      stream =  Firestore.instance
           .collection('users')
           .orderBy('photoUrl')
           .snapshots();
-    if (sortType == 3)
-      return Firestore.instance
+        });
+    }
+    else if (sortType == 3){
+        setState(() {
+      stream =  Firestore.instance
           .collection('users')
           .orderBy('createdAt')
           .snapshots();
-    else
-      return Firestore.instance
+        });
+    }
+    else{
+      stream =  Firestore.instance
           .collection('users')
           .orderBy('nickname')
-          .snapshots();
+          .snapshots();}
+    return stream;
   }
 }
 
 class Users extends StatefulWidget {
   final String currentUserId;
-  final int sortOrder;
-  Users({Key key, @required this.currentUserId, @required this.sortOrder}) : super(key: key);
+  Users({Key key, @required this.currentUserId}) : super(key: key);
 
   @override
-  UsersState createState() => new UsersState(currentUserId: currentUserId, sortOrder: sortOrder);
+  UsersState createState() => new UsersState(currentUserId: currentUserId);
 }
 
 class Choice {
